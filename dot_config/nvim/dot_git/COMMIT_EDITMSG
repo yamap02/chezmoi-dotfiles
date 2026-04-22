@@ -1,0 +1,13 @@
+refactor: バグ修正と非推奨API対応
+
+- base.lua: o.display = lastline (未定義変数) を削除
+- base.lua: vim.w.foldcolumn を vim.wo.foldcolumn に修正
+- base.lua: loaded_shada_plugin / loaded_spellfile_plugin の重複定義を削除
+- keymaps.lua: Y キーマップの重複定義を削除
+- keymaps.lua: <C-q> キーマップの重複定義を削除
+- init.lua / autocmd.lua / utils.lua / telescope.lua / filetree.lua: vim.loop -> vim.uv (Neovim 0.10+ 非推奨対応)
+- utils.lua: vim.lsp.get_active_clients -> vim.lsp.get_clients (非推奨対応)
+- colorscheme.lua: priority = 1 -> 1000 (カラースキームは最高優先度で読み込む)
+- manual.lua: which-key v3 API に対応 (wk.register -> wk.add)
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>

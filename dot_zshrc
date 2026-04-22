@@ -1,0 +1,119 @@
+# switch tmjc
+# if [[ -z "$TMUX" && -o interactive ]] && { command -v tmux > /dev/null 2>&1 }; then
+#   sessions="$(tmux list-sessions)"
+#
+#   if [[ -z "$sessions" ]]; then
+#     exec tmux new-session
+#   fi
+#
+#   dont_use_tmux="-- Don't use tmux"
+#   create_new_session="-- Create New Session"
+#
+#   if command -v fzf > /dev/null 2>&1 ; then
+#     id="$(echo "$sessions\n$create_new_session\n$dont_use_tmux" | fzf | cut -d: -f1)"
+#   else
+#     sessions=( ${(@f)"$(echo "$sessions\n$create_new_session\n$dont_use_tmux")"} )
+#     select res in $sessions
+#     do
+#       id="$(echo $res | cut -d: -f1)"
+#       break
+#     done
+#   fi
+#
+#   if [[ "$id" = "$create_new_session" ]]; then
+#     exec tmux new-session
+#   elif [[ "$id" = "$dont_use_tmux" ]]; then
+#     :  # do nothing
+#   else
+#     exec tmux attach-session -t "$id"
+#   fi
+# fi
+#
+# autoload colors
+
+fbr() {
+  local branches branch
+  branches=$(git branch -vv) &&
+  branch=$(echo "$branches" | fzf +m) &&
+  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+d="$HOME/.config/zsh"
+source "$d/base.zsh"
+source "$d/completion.zsh"
+source "$d/function.zsh"
+source "$d/alias.zsh"
+source "$d/bindkey.zsh"
+source "$d/plugins.zsh"
+source "$d/external_tool_init.zsh"
+unset d
+# source $HOME/.config/zsh/base.zsh
+# source $HOME/.config/zsh/completion.zsh
+# source $HOME/.config/zsh/function.zsh
+# source $HOME/.config/zsh/alias.zsh
+# source $HOME/.config/zsh/bindkey.zsh
+# source $HOME/.config/zsh/plugins.zsh
+# source $HOME/.config/zsh/external_tool_init.zsh
+
+# export TMUX_TMPDIR=/tmp
+[[ -r $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+
+if command -v zprof > /dev/null 2>&1 ; then
+  zprof
+fi
+# unset TMPDIR
+# zsh-fzf-history-search
+zinit ice lucid wait'0'
+zinit light joshskidmore/zsh-fzf-history-search
+
+# source $HOME/zsh-syntax-highlighting.zsh
+source $HOME/.zinit/plugins/zsh-users---zsh-history-substring-search/zsh-history-substring-search.zsh
+# Set threshold to 20seconds
+export AUTO_NOTIFY_THRESHOLD=30
+
+export AUTO_NOTIFY_IGNORE=("docker" "man" "espanso" "sleep" "nvim" "poetry" "ranger" "timeshift" "python" "tmux" "htop" "lazydocker" "lazygit")
+
+bindkey $terminfo[kcuu1] history-substring-search-up
+
+bindkey $terminfo[kcud1] history-substring-search-down
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=180'
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
+# fnm
+# export PATH=/home/armkn/.fnm:$PATH
+ # eval "`fnm env`"
+VBOX_USB=usbfs
+# export QSYS_ROOTDIR="/home/sin/.cache/yay/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/21.1/quartus/sopc_builder/bin"
+# source /usr/share/nvm/init-nvm.sh
+export GOPATH="$HOME/.go"
+# export PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+export PATH="$HOME/.gem/ruby/3.0.0/bin:$PATH"
+
+# export W3MIMGDISPLAY_PATH=/opt/homebrew/bin/w3mimgdisplay
+
+# export W3MIMGDISPLAY="/opt/homebrew/bin/w3m"
+# freeeze
+# export W3MIMGDISPLAY_PATH="/opt/homebrew/bin/w3m"
+
+# eval "$(rbenv init - zsh)"
+# export GEM_HOME=~/.gem/ruby/3.0.0/bin
+# export GEM_HOME="$HOME/.gem"
+# alias nvim='~/nvim.appimage'
+export nvim='~/nvim.appimage'
+
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+
+# ghostty terminfo (ranger/curses用)
+export TERMINFO_DIRS="$HOME/.local/share/terminfo:/usr/share/terminfo"
+
+# Added by Antigravity
+export PATH="/Users/user/.antigravity/antigravity/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/user/.lmstudio/bin"
+# End of LM Studio CLI section
+

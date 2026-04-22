@@ -1,0 +1,169 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(curl http://localhost*)",
+      "Bash(curl http://127.0.0.1*)",
+      "Bash(wget http://localhost*)",
+      "Bash(wget http://127.0.0.1*)",
+      "Bash(nc localhost*)",
+      "Bash(nc 127.0.0.1*)",
+      "Bash(docker ps *)",
+      "Bash(docker compose up *)"
+    ],
+    "ask": [
+      "Bash(docker push *)",
+      "Bash(docker login *)",
+      "Bash(docker system prune *)",
+      "Bash(docker volume prune *)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(~/Documents/**)",
+      "Read(~/Downloads/**)",
+      "Read(~/Library/**)",
+      "Read(**/.ssh/*)",
+      "Read(**/.aws/*)",
+      "Read(**/.gnupg/*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*_rsa)",
+      "Read(**/*_ed25519)",
+      "Read(**/*_dsa)",
+      "Read(**/credentials)",
+
+      "Glob(**/.env*)",
+      "Glob(~/Documents/**)",
+      "Glob(~/Downloads/**)",
+      "Glob(~/Library/**)",
+      "Glob(**/.ssh/*)",
+      "Glob(**/.aws/*)",
+
+      "Edit(**/.env*)",
+      "Edit(~/Documents/**)",
+      "Edit(~/Downloads/**)",
+      "Edit(~/Library/**)",
+      "Write(**/.env*)",
+      "Write(~/Documents/**)",
+      "Write(~/Downloads/**)",
+      "Write(~/Library/**)",
+
+      "Bash(cat **/.env*)",
+      "Bash(head **/.env*)",
+      "Bash(tail **/.env*)",
+      "Bash(grep * **/.env*)",
+      "Bash(less **/.env*)",
+      "Bash(more **/.env*)",
+      "Bash(open **/.env*)",
+
+      "Bash(cat **/secrets*)",
+      "Bash(cat **/*.key)",
+      "Bash(cat **/*.pem)",
+      "Bash(cat ~/.ssh/*)",
+      "Bash(cat ~/.aws/*)",
+
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(git push --force:*)",
+      "Bash(brew:*)",
+      "Bash(env:*)",
+      "Bash(printenv:*)",
+      "Bash(osascript:*)",
+      "Bash(crontab:*)",
+      "Bash(ls ~/Documents*)",
+      "Bash(ls ~/Downloads*)",
+      "Bash(ls ~/Library*)",
+      "Bash(find ~/Documents*)",
+      "Bash(find ~/Downloads*)",
+      "Bash(find ~/Library*)",
+      "Bash(rg * ~/Documents*)",
+      "Bash(rg * ~/Downloads*)",
+      "Bash(rg * ~/Library*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(ncat:*)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false,
+    "excludedCommands": [],
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "*.github.com",
+        "objects.githubusercontent.com",
+        "raw.githubusercontent.com",
+        "registry.npmjs.org",
+        "api.anthropic.com",
+        "api.github.com",
+        "*.vercel.com",
+        "*.supabase.co",
+        "localhost",
+        "127.0.0.1",
+        "<your-container-registry>",
+        "<your-package-registry>",
+        "<your-internal-api>"
+      ],
+      "allowLocalBinding": true
+    },
+    "filesystem": {
+      "allowWrite": [
+        "~/.docker",
+        "~/.cache",
+        "/tmp"
+      ],
+      "denyRead": [
+        "**/.env*",
+        "**/secrets*",
+        "**/*.key",
+        "**/*.pem",
+        "~/Documents/**",
+        "~/Downloads/**",
+        "~/Library/**",
+        "**/.ssh/*",
+        "**/.aws/*",
+        "**/.gnupg/*",
+        "**/*_rsa",
+        "**/*_ed25519",
+        "**/*_dsa",
+        "**/credentials"
+      ]
+    }
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "oh-my-claudecode@omc": true
+  },
+  "extraKnownMarketplaces": {
+    "omc": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/Yeachan-Heo/oh-my-claudecode.git"
+      }
+    }
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "language": "日本語",
+  "effortLevel": "medium",
+  "autoUpdatesChannel": "stable",
+  "voiceEnabled": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/user/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

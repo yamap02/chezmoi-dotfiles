@@ -1,0 +1,104 @@
+# ============================================
+# Ghostty + Claude Code 推奨設定（2025年版）
+# ============================================
+
+# テーマ（スクショ配色に合わせたカスタム）
+background = #0a0a0a
+foreground = #cdd6f4
+
+# カラーパレット（Catppuccin Mocha ベース / スクショ配色再現）
+palette = 0=#1e1e2e
+palette = 1=#f38ba8
+palette = 2=#a6e3a1
+palette = 3=#f9e2af
+palette = 4=#4695d4
+palette = 5=#cba6f7
+palette = 6=#89dceb
+palette = 7=#cdd6f4
+palette = 8=#585b70
+palette = 9=#f38ba8
+palette = 10=#a6e3a1
+palette = 11=#f9e2af
+palette = 12=#5ba4f5
+palette = 13=#cba6f7
+palette = 14=#89dceb
+palette = 15=#ffffff
+
+# フォント（日本語フォールバック追加）
+# font-family = JetBrainsMono Nerd
+# font-family = UDEVGothicNF
+font-family = UDEVGothic
+
+# font-family = "Hiragino Kaku Gothic ProN"
+font-size = 16
+font-feature = -dlig
+
+# Unicode v2（tmux内CJK/日本語の幅を正しく計算）
+# unicode-version = 2
+
+# 行間を詰めてコンパクトに
+adjust-cell-height = +1
+
+# ウィンドウ
+window-padding-x = 12
+window-padding-y = 12
+window-padding-balance = true
+background-opacity = 0.95
+macos-titlebar-style = tabs
+
+# カーソル
+cursor-style = block
+cursor-style-blink = false
+
+# 動作
+# xterm-256color にすることで ranger 等の TUI アプリとのキーリピート互換性を確保
+# (デフォルトの xterm-ghostty は Kitty キーボードプロトコルを使い ranger がフリーズする)
+term = xterm-256color
+macos-option-as-alt = true
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+
+# 通知（Claude Code用）
+bell-features = title,attention
+
+# 垂直分割（右にペインを追加）
+# Cmd+D
+
+# 水平分割（下にペインを追加）
+# Cmd+Shift+D
+
+# ペイン間の移動（方向キーで指定）
+# Option+Cmd+↑    上のペインへ
+# Option+Cmd+↓    下のペインへ
+# Option+Cmd+←    左のペインへ
+# Option+Cmd+→    右のペインへ
+
+# ========================================
+# キーバインド
+# ========================================
+# Quick Terminal
+#keybind = global:cmd+grave_accent=toggle_quick_terminal
+
+# 設定
+#keybind = cmd+comma=open_config
+#keybind = cmd+shift+comma=reload_config
+
+# タブ
+#keybind = cmd+t=new_tab
+#keybind = cmd+w=close_surface
+#keybind = cmd+1=goto_tab:1
+#keybind = cmd+2=goto_tab:2
+#keybind = cmd+3=goto_tab:3
+#keybind = cmd+9=last_tab
+
+# 分割
+#keybind = cmd+d=new_split:right
+#keybind = cmd+shift+d=new_split:down
+#keybind = cmd+opt+left=goto_split:left
+#keybind = cmd+opt+right=goto_split:right
+#keybind = cmd+opt+up=goto_split:up
+#keybind = cmd+opt+down=goto_split:down
+
+# Claude Code用
+#keybind = shift+enter=text:\n
+#keybind = cmd+k=clear_screen
