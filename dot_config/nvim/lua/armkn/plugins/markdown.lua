@@ -3,7 +3,7 @@ return {
         "MeanderingProgrammer/render-markdown.nvim",
         enabled = false,
         dependencies = {
-            "nvim-treesitter/nvim-treesitter",
+            "neovim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
         },
         ft = { "markdown", "md" },

@@ -52,8 +52,6 @@ keymap.set("x", "<Space>m", "<Plug>(quickhl-manual-this)", opts)
 keymap.set("n", "<Space>M", "<Plug>(quickhl-manual-reset)", opts)
 keymap.set("x", "<Space>M", "<Plug>(quickhl-manual-reset)", opts)
 
-keymap.set("n", "<Space>n", ":NeoTreeFocus<CR>", opts)
-
 -- Copy
 -- keymap.set("n", "Y", "y$", opts)
 keymap.set("n", "<Leader>y", "<Cmd>%yank<CR>", opts)

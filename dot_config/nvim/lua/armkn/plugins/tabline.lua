@@ -38,14 +38,6 @@ show_close_icon = false,
                 separator_style = "thin", -- "slant" | "thick" | "thin" | { 'any', 'any' }
                 enforce_regular_tabs = false,
                 always_show_bufferline = true,
-                offsets = {
-                    {
-                        filetype = "neo-tree",
-                        text = "Neo-tree",
-                        highlight = "Directory",
-                        text_align = "left",
-                    },
-                },
             },
         },
     },

@@ -55,7 +55,7 @@ return {
     --         vim.cmd("hi IndentBlanklineIndent2 gui=nocombine guibg=" .. util.darken(colors.bg_dark, 0.5))
     --         return {
     --             char = "",
-    --             filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
+    --             filetype_exclude = { "help", "alpha", "dashboard", "Trouble", "lazy" },
     --             show_trailing_blankline_indent = false,
     --             show_current_context = false,
     --             char_highlight_list = {

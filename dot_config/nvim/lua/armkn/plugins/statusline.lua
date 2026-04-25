@@ -24,7 +24,7 @@ return {
                     lualine_b = { { "filename", path = 1 } },
                     lualine_c = {},
                 },
-                extensions = { "neo-tree", "lazy" },
+                extensions = { "lazy" },
             }
         end,
     },

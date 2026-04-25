@@ -16,11 +16,5 @@ return {
             vim.cmd([[colorscheme sonokai]])
         end,
     },
-    -- catppuccin
-    {
-        "catppuccin/nvim",
-        lazy = true,
-        name = "catppuccin",
-    },
     -- colorscheme
 }
