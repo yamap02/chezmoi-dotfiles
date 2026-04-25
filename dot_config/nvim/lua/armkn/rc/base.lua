@@ -133,7 +133,7 @@ o.splitbelow = true
 o.splitright = true
 
 -- Backup
-o.backup = true
+o.backup = false
 o.backupdir = vim.fn.stdpath("data") .. "/backup/"
 vim.fn.mkdir(o.backupdir, "p")
 o.backupskip = ""
@@ -162,12 +162,12 @@ o.termguicolors = true
 
 -- UI, Visual, Display
 o.cursorline = true
-o.cursorcolumn = true
+o.cursorcolumn = false
 o.display = "lastline"
 o.showmode = false
 o.showmatch = true
 o.matchtime = 1
-o.showcmd = true
+o.showcmd = false
 o.number = true
 o.relativenumber = false
 o.wrap = true

@@ -1,6 +1,7 @@
 return {
     {
         "MeanderingProgrammer/render-markdown.nvim",
+        enabled = false,
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
@@ -9,6 +10,9 @@ return {
         ---@module 'render-markdown'
         ---@type render.md.UserConfig
         opts = {
+            anti_conceal = {
+                enabled = false,
+            },
             -- 見出し: レベルごとにアイコンと背景色を付ける
             heading = {
                 enabled = true,

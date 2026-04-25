@@ -4,14 +4,34 @@ vim.api.nvim_create_augroup(MY_GROUP, { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
 
 -- フォーカス中の window でのみ現在行・現在列をハイライト
-autocmd("WinEnter", { group = MY_GROUP, command = "setlocal cursorline cursorcolumn" })
+autocmd("WinEnter", { group = MY_GROUP, command = "setlocal cursorline nocursorcolumn" })
 autocmd("WinLeave", { group = MY_GROUP, command = "setlocal nocursorline nocursorcolumn" })
 
+local function switch_fcitx(args)
+    if vim.fn.executable("fcitx-remote") ~= 1 then
+        return
+    end
+    if vim.bo[args.buf].buftype ~= "" then
+        return
+    end
+    vim.system({ "fcitx-remote", args.data.command })
+end
+
 -- Insertモードに入ったときにfcitxを英語入力に切り替える
-vim.cmd("autocmd InsertEnter * silent !fcitx-remote -o")
+autocmd("InsertEnter", {
+    group = MY_GROUP,
+    callback = function(args)
+        switch_fcitx({ buf = args.buf, data = { command = "-o" } })
+    end,
+})
 
 -- Normalモードに戻ったときにfcitxを無効にする
-vim.cmd("autocmd InsertLeave * silent !fcitx-remote -c")
+autocmd("InsertLeave", {
+    group = MY_GROUP,
+    callback = function(args)
+        switch_fcitx({ buf = args.buf, data = { command = "-c" } })
+    end,
+})
 
 -- shebang が指定されているファイルを保存したら実行可能フラグを付与する
 autocmd("BufWritePost", {

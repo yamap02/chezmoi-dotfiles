@@ -38,28 +38,19 @@ return {
             matchup = { enable = false }, -- Neovim 0.12.0 treesitter API 変更との非互換のため無効化
             ensure_installed = {
                 "bash",
-                "c",
-                "cpp",
                 "go",
                 "html",
                 "javascript",
                 "json",
                 "lua",
-                "luadoc",
-                "luap",
                 "markdown",
                 "markdown_inline",
                 "python",
-                "query",
-                "regex",
-                "rust",
-                "tsx",
-                "typescript",
                 "vim",
                 "yaml",
             },
             incremental_selection = {
-                enable = true,
+                enable = false,
                 keymaps = {
                     init_selection = "<C-space>",
                     node_incremental = "<C-space>",
@@ -90,12 +81,12 @@ return {
                     },
                 },
                 swap = {
-                    enable = true,
+                    enable = false,
                     swap_next = { [",al"] = "@parameter.inner" },
                     swap_previous = { [",ah"] = "@parameter.inner" },
                 },
                 move = {
-                    enable = true,
+                    enable = false,
                     set_jumps = true, -- whether to set jumps in the jumplist
                     goto_next_start = {
                         ["]f"] = { query = "@function.outer", desc = "Next function start" },

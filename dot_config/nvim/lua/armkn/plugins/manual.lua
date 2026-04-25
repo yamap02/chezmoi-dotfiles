@@ -3,7 +3,7 @@ return {
         "folke/which-key.nvim",
         event = "VeryLazy",
         opts = {
-            plugins = { spelling = true },
+            plugins = { spelling = false },
         },
         config = function(_, opts)
             local wk = require("which-key")
@@ -23,7 +23,7 @@ return {
                 { "<leader>s",      group = "search",             mode = { "n", "v" } },
                 { "<leader>u",      group = "ui",                 mode = { "n", "v" } },
                 { "<leader>w",      group = "windows",            mode = { "n", "v" } },
-                { "<leader>x",      group = "diagnostics/quickfix", mode = { "n", "v" } },
+                { "<leader>x",      group = "quickfix", mode = { "n", "v" } },
             })
         end,
     },

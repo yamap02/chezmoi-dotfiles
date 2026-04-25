@@ -1,8 +1,10 @@
 return {
     {
         "lewis6991/gitsigns.nvim",
-        event = { "BufReadPre", "BufNewFile" },
+        event = { "BufReadPost", "BufNewFile" },
         opts = {
+            attach_to_untracked = false,
+            max_file_length = 20000,
             signs = {
                 add = { text = "▎" },
                 change = { text = "▎" },
