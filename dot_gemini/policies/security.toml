@@ -1,0 +1,201 @@
+# Gemini security policy
+#
+# 方針:
+# - localhost / 127.0.0.1 の確認通信だけ明示許可
+# - .env / 資格情報 / 秘密鍵 / 個人ディレクトリは read / glob / write / shell 経路で拒否
+# - 破壊的操作、永続変更、外部接続、認証操作は shell で拒否
+
+# ---- Allow: local development probes ---------------------------------------
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^(curl|wget)\s+https?://(localhost|127\.0\.0\.1)([:/]|$)'
+decision = "allow"
+priority = 980
+
+# ---- Deny: file access ------------------------------------------------------
+
+[[rule]]
+toolName = "read_file"
+argsPattern = '\.env'
+decision = "deny"
+priority = 950
+denyMessage = ".env files are restricted"
+
+[[rule]]
+toolName = "glob"
+argsPattern = '\.env'
+decision = "deny"
+priority = 950
+denyMessage = ".env files are restricted"
+
+[[rule]]
+toolName = "write_file"
+argsPattern = '\.env'
+decision = "deny"
+priority = 950
+denyMessage = ".env files are restricted"
+
+[[rule]]
+toolName = "edit_file"
+argsPattern = '\.env'
+decision = "deny"
+priority = 950
+denyMessage = ".env files are restricted"
+
+[[rule]]
+toolName = "read_file"
+argsPattern = '(^|/)(secrets|credentials)(/|$)|(^|/)\.(ssh|aws|gnupg)/|(^|/)\.(npmrc|netrc|pypirc)$|(^|/)\.docker/config\.json$|(_rsa|_ed25519|_dsa|\.(pem|key))$'
+decision = "deny"
+priority = 950
+denyMessage = "credentials and private keys are restricted"
+
+[[rule]]
+toolName = "glob"
+argsPattern = '(^|/)(secrets|credentials)(/|$)|(^|/)\.(ssh|aws|gnupg)/|(^|/)\.(npmrc|netrc|pypirc)$|(^|/)\.docker/config\.json$|(_rsa|_ed25519|_dsa|\.(pem|key))$'
+decision = "deny"
+priority = 950
+denyMessage = "credentials and private keys are restricted"
+
+[[rule]]
+toolName = "read_file"
+argsPattern = '(^|/)(Documents|Downloads|Library)(/|$)|^~/((Documents|Downloads|Library))(/|$)'
+decision = "deny"
+priority = 950
+denyMessage = "Documents, Downloads, and Library are restricted"
+
+[[rule]]
+toolName = "glob"
+argsPattern = '(^|/)(Documents|Downloads|Library)(/|$)|^~/((Documents|Downloads|Library))(/|$)'
+decision = "deny"
+priority = 950
+denyMessage = "Documents, Downloads, and Library are restricted"
+
+[[rule]]
+toolName = "write_file"
+argsPattern = '(^|/)(Documents|Downloads|Library)(/|$)|^~/((Documents|Downloads|Library))(/|$)'
+decision = "deny"
+priority = 950
+denyMessage = "Documents, Downloads, and Library are restricted"
+
+[[rule]]
+toolName = "edit_file"
+argsPattern = '(^|/)(Documents|Downloads|Library)(/|$)|^~/((Documents|Downloads|Library))(/|$)'
+decision = "deny"
+priority = 950
+denyMessage = "Documents, Downloads, and Library are restricted"
+
+# ---- Deny: shell reads ------------------------------------------------------
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '(^|\\s)(cat|head|tail|less|more|grep|open)\\s+.*(\\.env|/secrets|/credentials|\\.(pem|key)|_rsa|_ed25519|_dsa|/\\.ssh/|/\\.aws/|/\\.gnupg/|/\\.npmrc|/\\.netrc|/\\.pypirc|/\\.docker/config\\.json)'
+decision = "deny"
+priority = 950
+denyMessage = "credentials and private keys are restricted"
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '(^|\\s)(cat|head|tail|less|more|open|ls|find|rg)\\s+.*(~/(Documents|Downloads|Library)|/Users/user/(Documents|Downloads|Library))'
+decision = "deny"
+priority = 950
+denyMessage = "Documents, Downloads, and Library are restricted"
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "env"
+decision = "deny"
+priority = 950
+denyMessage = "environment dumps are restricted"
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "printenv"
+decision = "deny"
+priority = 950
+denyMessage = "environment dumps are restricted"
+
+# ---- Deny: destructive or persistent shell commands -------------------------
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = "rm\\s+-rf"
+decision = "deny"
+priority = 950
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "sudo"
+decision = "deny"
+priority = 950
+denyMessage = "sudo is not permitted"
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "brew"
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^(osascript|crontab|launchctl|history)\b'
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^defaults\\s+write\\b'
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^chmod\\s+\\+s\\b'
+decision = "deny"
+priority = 950
+
+# ---- Deny: external connections and credential changes ----------------------
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "curl"
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = "wget"
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^(ssh|scp|ncat)\b'
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^(npm\\s+install\\s+-g|pip\\s+install|pip3\\s+install|git\\s+config\\s+--global|git\\s+config\\s+--system|git\\s+remote\\s+add|git\\s+credential|gh\\s+auth)\\b'
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^git\\s+push\\s+(-f|--force)\\b|\\bgit\\s+push\\b.*\\s--force\\b'
+decision = "deny"
+priority = 900
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^(python|python3)\\s+-c\\s+.*\\b(urllib|urllib3|requests|httpx|aiohttp|socket|subprocess|ftplib|smtplib|telnetlib|webbrowser)\\b'
+decision = "deny"
+priority = 900
+denyMessage = "python -c network-capable snippets are restricted"
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '^node\\s+-e\\s+.*\\b(fetch|http|https|net|dgram|child_process|tls|http2)\\b'
+decision = "deny"
+priority = 900
+denyMessage = "node -e network-capable snippets are restricted"

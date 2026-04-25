@@ -1,0 +1,317 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(curl http://localhost*)",
+      "Bash(curl http://127.0.0.1*)",
+      "Bash(wget http://localhost*)",
+      "Bash(wget http://127.0.0.1*)",
+      "Bash(nc localhost*)",
+      "Bash(nc 127.0.0.1*)",
+
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run test)",
+      "Bash(npm run test:*)",
+      "Bash(npm run build)",
+      "Bash(npm run build:*)",
+      "Bash(npm run typecheck)",
+
+      "Bash(pnpm lint)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm -w test:*)",
+      "Bash(pnpm build)",
+      "Bash(pnpm typecheck)",
+
+      "Bash(yarn lint)",
+      "Bash(yarn test)",
+      "Bash(yarn build)",
+
+      "Bash(docker ps *)",
+      "Bash(docker compose up *)"
+    ],
+    "ask": [
+      "WebFetch",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh release:*)",
+
+      "Bash(npm publish:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(yarn publish:*)",
+
+      "Bash(docker push *)",
+      "Bash(docker login *)",
+      "Bash(docker system prune *)",
+      "Bash(docker volume prune *)",
+
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git rebase:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh workflow run:*)",
+
+      "Bash(terraform apply:*)",
+      "Bash(terraform destroy:*)",
+      "Bash(kubectl apply:*)",
+      "Bash(kubectl delete:*)",
+
+      "Bash(git branch -D:*)",
+      "Bash(git stash drop:*)",
+      "Bash(pkill:*)",
+      "Bash(kill -9:*)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.ssh/*)",
+      "Read(**/.aws/*)",
+      "Read(**/.gnupg/*)",
+      "Read(**/.npmrc)",
+      "Read(**/.netrc)",
+      "Read(**/.pypirc)",
+      "Read(**/.docker/config.json)",
+
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*_rsa)",
+      "Read(**/*_ed25519)",
+      "Read(**/*_dsa)",
+      "Read(**/credentials)",
+
+      "Read(~/Documents)",
+      "Read(~/Documents/**)",
+      "Read(/Users/user/Documents)",
+      "Read(/Users/user/Documents/**)",
+
+      "Read(~/Downloads)",
+      "Read(~/Downloads/**)",
+      "Read(/Users/user/Downloads)",
+      "Read(/Users/user/Downloads/**)",
+
+      "Read(~/Library)",
+      "Read(~/Library/**)",
+      "Read(/Users/user/Library)",
+      "Read(/Users/user/Library/**)",
+
+      "Glob(**/.env*)",
+      "Glob(**/.ssh/*)",
+      "Glob(**/.aws/*)",
+      "Glob(**/.gnupg/*)",
+      "Glob(**/secrets/**)",
+      "Glob(**/credentials)",
+      "Glob(~/Documents)",
+      "Glob(~/Documents/**)",
+      "Glob(/Users/user/Documents)",
+      "Glob(/Users/user/Documents/**)",
+      "Glob(~/Downloads)",
+      "Glob(~/Downloads/**)",
+      "Glob(/Users/user/Downloads)",
+      "Glob(/Users/user/Downloads/**)",
+      "Glob(~/Library)",
+      "Glob(~/Library/**)",
+      "Glob(/Users/user/Library)",
+      "Glob(/Users/user/Library/**)",
+
+      "Edit(**/.env*)",
+      "Write(**/.env*)",
+      "Edit(~/Documents)",
+      "Edit(~/Documents/**)",
+      "Edit(/Users/user/Documents)",
+      "Edit(/Users/user/Documents/**)",
+      "Write(~/Documents)",
+      "Write(~/Documents/**)",
+      "Write(/Users/user/Documents)",
+      "Write(/Users/user/Documents/**)",
+      "Edit(~/Downloads)",
+      "Edit(~/Downloads/**)",
+      "Edit(/Users/user/Downloads)",
+      "Edit(/Users/user/Downloads/**)",
+      "Write(~/Downloads)",
+      "Write(~/Downloads/**)",
+      "Write(/Users/user/Downloads)",
+      "Write(/Users/user/Downloads/**)",
+      "Edit(~/Library)",
+      "Edit(~/Library/**)",
+      "Edit(/Users/user/Library)",
+      "Edit(/Users/user/Library/**)",
+      "Write(~/Library)",
+      "Write(~/Library/**)",
+      "Write(/Users/user/Library)",
+      "Write(/Users/user/Library/**)",
+
+      "Bash(cat **/.env*)",
+      "Bash(head **/.env*)",
+      "Bash(tail **/.env*)",
+      "Bash(grep * **/.env*)",
+      "Bash(less **/.env*)",
+      "Bash(more **/.env*)",
+      "Bash(open **/.env*)",
+
+      "Bash(cat **/secrets*)",
+      "Bash(cat **/credentials)",
+      "Bash(cat **/*.key)",
+      "Bash(cat **/*.pem)",
+      "Bash(cat ~/.ssh/*)",
+      "Bash(cat ~/.aws/*)",
+      "Bash(cat ~/.gnupg/*)",
+      "Bash(ls ~/Documents*)",
+      "Bash(ls /Users/user/Documents*)",
+      "Bash(find ~/Documents*)",
+      "Bash(find /Users/user/Documents*)",
+      "Bash(rg * ~/Documents*)",
+      "Bash(rg * /Users/user/Documents*)",
+      "Bash(cat ~/Documents/*)",
+      "Bash(cat /Users/user/Documents/*)",
+      "Bash(ls ~/Downloads*)",
+      "Bash(ls /Users/user/Downloads*)",
+      "Bash(find ~/Downloads*)",
+      "Bash(find /Users/user/Downloads*)",
+      "Bash(rg * ~/Downloads*)",
+      "Bash(rg * /Users/user/Downloads*)",
+      "Bash(cat ~/Downloads/*)",
+      "Bash(cat /Users/user/Downloads/*)",
+      "Bash(ls ~/Library*)",
+      "Bash(ls /Users/user/Library*)",
+      "Bash(find ~/Library*)",
+      "Bash(find /Users/user/Library*)",
+      "Bash(rg * ~/Library*)",
+      "Bash(rg * /Users/user/Library*)",
+      "Bash(cat ~/Library/*)",
+      "Bash(cat /Users/user/Library/*)",
+
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+
+      "Bash(brew:*)",
+      "Bash(launchctl:*)",
+      "Bash(defaults write:*)",
+      "Bash(env:*)",
+      "Bash(printenv:*)",
+      "Bash(osascript:*)",
+      "Bash(crontab:*)",
+
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(ncat:*)",
+
+      "Bash(npm install -g:*)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+
+      "Bash(git config --global:*)",
+      "Bash(gh auth:*)",
+      "Bash(chmod +s:*)",
+      "Bash(git config --system:*)",
+      "Bash(history:*)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": false,
+    "allowUnsandboxedCommands": false,
+    "excludedCommands": [
+      "git push",
+      "gh pr create",
+      "gh pr merge",
+      "docker push",
+      "docker login"
+    ],
+    "network": {
+      "allowedDomains": [
+        "github.com",
+        "*.github.com",
+        "api.github.com",
+        "objects.githubusercontent.com",
+        "raw.githubusercontent.com",
+        "registry.npmjs.org",
+        "api.anthropic.com",
+        "vercel.com",
+        "api.vercel.com",
+        "*.vercel.com",
+        "supabase.co",
+        "api.supabase.co",
+        "*.supabase.co",
+        "localhost",
+        "127.0.0.1",
+        "<your-container-registry>",
+        "<your-package-registry>",
+        "<your-internal-api>"
+      ],
+      "allowLocalBinding": true
+    },
+    "filesystem": {
+      "allowWrite": [
+        "~/.docker/buildx",
+        "~/.cache/claude",
+        "/tmp/claude"
+      ],
+      "denyRead": [
+        "**/.env*",
+        "**/secrets*",
+        "**/*.key",
+        "**/*.pem",
+        "**/.ssh/*",
+        "**/.aws/*",
+        "**/.gnupg/*",
+        "**/.npmrc",
+        "**/.netrc",
+        "**/.pypirc",
+        "**/.docker/config.json",
+        "**/*_rsa",
+        "**/*_ed25519",
+        "**/*_dsa",
+        "**/credentials",
+        "~/Documents",
+        "~/Documents/**",
+        "/Users/user/Documents",
+        "/Users/user/Documents/**",
+        "~/Downloads",
+        "~/Downloads/**",
+        "/Users/user/Downloads",
+        "/Users/user/Downloads/**",
+        "~/Library",
+        "~/Library/**",
+        "/Users/user/Library",
+        "/Users/user/Library/**"
+      ]
+    }
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "oh-my-claudecode@omc": true
+  },
+  "extraKnownMarketplaces": {
+    "omc": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/Yeachan-Heo/oh-my-claudecode.git"
+      }
+    }
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "language": "日本語",
+  "effortLevel": "medium",
+  "autoUpdatesChannel": "stable",
+  "voiceEnabled": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/user/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

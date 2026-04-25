@@ -1,0 +1,192 @@
+personality = "pragmatic"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+approval_policy = "untrusted"
+sandbox_mode = "workspace-write"
+notify = ["/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.750/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+
+developer_instructions = """
+Apply Claude-equivalent security constraints.
+
+- Treat these reads as forbidden even if a tool appears to allow them: `**/.env`, `**/.env.*`, `**/secrets*`, `**/*.key`, `**/*.pem`, `**/.ssh/**`, `**/.aws/**`, `**/.gnupg/**`, `**/*_rsa`, `**/*_ed25519`, `**/*_dsa`, `**/credentials`.
+- Also treat these reads as forbidden: `**/.npmrc`, `**/.netrc`, `**/.pypirc`, `**/.docker/config.json`, `~/Documents/**`, `~/Downloads/**`, `~/Library/**`.
+- Do not edit or create `.env*` files.
+- Do not edit or create files under `~/Documents/**`, `~/Downloads/**`, or `~/Library/**` unless the user explicitly asks and the operation is non-destructive.
+- Treat these shell commands as denied unless the user explicitly asks for them: `rm -rf`, `sudo`, `git push --force`, `git push -f`, `brew`, `env`, `printenv`, `osascript`, `crontab`, `ssh`, `scp`, `ncat`, `chmod +s`, `git config --global`, `git config --system`, `gh auth`, `history`.
+- Treat `docker push`, `docker login`, `docker system prune`, and `docker volume prune` as approval-required.
+- Treat publishing, release, merge, repo deletion, workflow dispatch, Terraform apply/destroy, Kubernetes apply/delete, force branch deletion, stash drop, and process-kill commands as approval-required.
+- Treat `curl`, `wget`, and `nc` as approval-required unless the destination is `localhost` or `127.0.0.1`.
+- Treat `npm run` commands as always allowed and do not request approval for them.
+- Keep network usage minimal; prefer localhost. If external network access is required, ask first and restrict scope to the concrete allowed domain the user requested.
+"""
+
+[sandbox_workspace_write]
+network_access = false
+writable_roots = [
+  "/Users/user/.codex",
+  "/Users/user/.docker/buildx",
+  "/Users/user/.cache",
+  "/tmp"
+]
+exclude_tmpdir_env_var = false
+exclude_slash_tmp = false
+
+[projects."/Users/user"]
+trust_level = "untrusted"
+
+[projects."/Users/user/anti/dummy_chat"]
+trust_level = "trusted"
+
+[projects."/Users/user/claude-anti-md"]
+trust_level = "trusted"
+
+[projects."/Users/user/aa"]
+trust_level = "trusted"
+
+[projects."/Users/user/spec/engineermatching"]
+trust_level = "trusted"
+
+[projects."/Users/user/claude/cloud-PM"]
+trust_level = "trusted"
+
+[projects."/Users/user/.claude"]
+trust_level = "trusted"
+
+[projects."/Users/user/.gemini"]
+trust_level = "trusted"
+
+[projects."/Users/user/.codex"]
+trust_level = "trusted"
+
+[projects."/Users/user/anti/GAS-app-bestpractice"]
+trust_level = "trusted"
+
+[projects."/Users/user/claude/chrome-extention-base"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/chrome-extention-base"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/onetab_clone"]
+trust_level = "trusted"
+
+[notice.model_migrations]
+"gpt-5.2-codex" = "gpt-5.3-codex"
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."browser-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+# ---------------------------------------------------------------------------
+# サンドボックス設定
+# Claude Code の sandbox セクションに相当
+# ---------------------------------------------------------------------------
+[sandbox]
+
+# ネットワークアクセス制御
+# Claude Code: allowedDomains（外部ドメイン許可）+ allowLocalBinding = true
+# "localhost-only" = localhost / 127.0.0.1 のみ許可、外部通信はブロック
+network = "localhost-only"
+
+# ディスクアクセスを最小権限に制限
+# Claude Code の sandbox.filesystem に相当
+full_disk_access = false
+
+# 書き込み許可ディレクトリ（それ以外は読み取り専用）
+# Claude Code sandbox の write.allowOnly に相当
+writable_roots = [
+  "/Users/user/.codex",
+  "/Users/user/.docker/buildx",
+  "/Users/user/.cache",
+  "/tmp"
+]
+
+# 読み取り禁止パターン
+# Claude Code: sandbox.filesystem.denyRead + permissions.deny の Read/* に相当
+deny_read_patterns = [
+  "**/node_modules/**",
+  "**/.env",
+  "**/.env.*",
+  "**/.env.local",
+  "**/.env.production",
+  "**/.env.development",
+  "**/.npmrc",
+  "**/.netrc",
+  "**/.pypirc",
+  "**/.docker/config.json",
+  "**/.ssh/**",
+  "**/.aws/**",
+  "**/.gnupg/**",
+  "**/*.pem",
+  "**/*.key",
+  "**/*_rsa",
+  "**/*_ed25519",
+  "**/*_dsa",
+  "**/secrets*",
+  "**/credentials",
+  "/Users/user/Documents/**",
+  "/Users/user/Downloads/**",
+  "/Users/user/Library/**"
+]
+
+# ---------------------------------------------------------------------------
+# 危険コマンドのブロック
+# Claude Code の permissions.deny Bash(*) に相当
+# approval_mode = "suggest" で全コマンドが承認対象になるが、
+# 以下を明示的に拒否リストに追加することで二重に保護する
+# ---------------------------------------------------------------------------
+[shell]
+deny_commands = [
+  "rm -rf",
+  "sudo",
+  "git push --force",
+  "git push -f",
+  "curl",          # localhost向けは sandbox.network で許可済み
+  "wget",
+  "brew",
+  "env",
+  "printenv",
+  "osascript",
+  "crontab",
+  "ssh",
+  "scp",
+  "nc",
+  "ncat",
+  "npm install -g",
+  "pip install",
+  "pip3 install",
+  "git config --global",
+  "git config --system",
+  "gh auth",
+  "chmod +s",
+  "history",
+  "launchctl",
+  "defaults write"
+]
+
+[marketplaces.openai-bundled]
+last_updated = "2026-04-24T23:29:21Z"
+source_type = "local"
+source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-04-23T18:55:30Z"
+source_type = "local"
+source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[features]
+memories = true
