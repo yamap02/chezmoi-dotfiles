@@ -30,7 +30,8 @@ alias diff='diff --color=auto'
 alias ip='ip --color=auto'
 
 # My
-alias r='ranger-cd'
+# alias r='ranger-cd'
+alias r='yazi'
 alias lg='lazygit'
 alias ld='lazydocker'
 # alias S='shutdown -h now'

@@ -1,9 +1,24 @@
 personality = "pragmatic"
-model = "gpt-5.5"
+model = "gpt-5.4"
 model_reasoning_effort = "medium"
-approval_policy = "untrusted"
+approval_policy = { granular = { sandbox_approval = true, rules = true, mcp_elicitations = true, request_permissions = true, skill_approval = true } }
+approvals_reviewer = "user"
 sandbox_mode = "workspace-write"
-notify = ["/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.750/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+default_permissions = "safe-dev"
+
+notify = ["/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.770/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+
+[auto_review]
+policy = """
+Review approval requests conservatively.
+
+- Reject requests that read, write, move, or delete credentials, secrets, `.env*`, SSH keys, cloud auth files, or files under `~/Documents/**`, `~/Downloads/**`, or `~/Library/**` unless the user explicitly asked for that exact path and the action is non-destructive.
+- Reject requests that add external network access, widen writable roots, weaken sandboxing, lower approval requirements, or switch to broader permission profiles unless the user explicitly asked for that configuration change.
+- Reject destructive or irreversible actions by default, including force push, branch deletion, history rewriting, repo deletion, workflow dispatch, release/publish, Terraform apply/destroy, Kubernetes apply/delete, and process-kill commands, unless the user explicitly requested the action and the target is clearly identified.
+- Reject shell or tool requests that execute arbitrary remote code or install global/system-wide software unless the user explicitly asked for them.
+- Approve only narrowly scoped requests that stay within the current sandbox intent, preserve existing hardening, and are necessary to complete the user's stated task.
+- When uncertain, reject rather than approve.
+"""
 
 developer_instructions = """
 Apply Claude-equivalent security constraints.
@@ -20,16 +35,57 @@ Apply Claude-equivalent security constraints.
 - Keep network usage minimal; prefer localhost. If external network access is required, ask first and restrict scope to the concrete allowed domain the user requested.
 """
 
+
 [sandbox_workspace_write]
 network_access = false
 writable_roots = [
   "/Users/user/.codex",
   "/Users/user/.docker/buildx",
-  "/Users/user/.cache",
-  "/tmp"
+  "/Users/user/.cache"
 ]
-exclude_tmpdir_env_var = false
-exclude_slash_tmp = false
+exclude_tmpdir_env_var = true
+exclude_slash_tmp = true
+
+[permissions.safe-dev.filesystem]
+glob_scan_max_depth = 8
+"/Users/user/.codex" = "write"
+"/Users/user/.docker/buildx" = "write"
+"/Users/user/.cache" = "write"
+"/Users/user/Documents/**" = "none"
+"/Users/user/Downloads/**" = "none"
+"/Users/user/Library/**" = "none"
+"~/.ssh/**" = "none"
+"~/.aws/**" = "none"
+"~/.gnupg/**" = "none"
+"~/.npmrc" = "none"
+"~/.netrc" = "none"
+"~/.pypirc" = "none"
+"~/.docker/config.json" = "none"
+
+[permissions.safe-dev.filesystem.":project_roots"]
+"." = "write"
+"**/node_modules/**" = "none"
+"**/.env" = "none"
+"**/.env.*" = "none"
+"**/.npmrc" = "none"
+"**/.netrc" = "none"
+"**/.pypirc" = "none"
+"**/.docker/config.json" = "none"
+"**/.ssh/**" = "none"
+"**/.aws/**" = "none"
+"**/.gnupg/**" = "none"
+"**/*.pem" = "none"
+"**/*.key" = "none"
+"**/*_rsa" = "none"
+"**/*_ed25519" = "none"
+"**/*_dsa" = "none"
+"**/secrets*" = "none"
+"**/credentials" = "none"
+
+[permissions.safe-dev.network]
+enabled = false
+mode = "limited"
+allow_local_binding = true
 
 [projects."/Users/user"]
 trust_level = "untrusted"
@@ -70,6 +126,36 @@ trust_level = "trusted"
 [projects."/Users/user/ai-dev/onetab_clone"]
 trust_level = "trusted"
 
+[projects."/Users/user/.config/nvim"]
+trust_level = "trusted"
+
+[projects."/Users/user/.config/cmux"]
+trust_level = "trusted"
+
+[projects."/Users/user/.config/ghostty"]
+trust_level = "trusted"
+
+[projects."/Users/user/.config/ranger"]
+trust_level = "trusted"
+
+[projects."/Users/user/.config/wezterm"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/cloud-PM"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/archive"]
+trust_level = "trusted"
+
+[projects."/Users/user/.config"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/onetab_clone_bun"]
+trust_level = "trusted"
+
+[projects."/Users/user/Library/CloudStorage/GoogleDrive-pawapawa147@gmail.com/My Drive"]
+trust_level = "trusted"
+
 [notice.model_migrations]
 "gpt-5.2-codex" = "gpt-5.3-codex"
 
@@ -79,9 +165,6 @@ enabled = true
 [plugins."computer-use@openai-bundled"]
 enabled = true
 
-[plugins."browser-use@openai-bundled"]
-enabled = true
-
 [plugins."documents@openai-primary-runtime"]
 enabled = true
 
@@ -89,6 +172,9 @@ enabled = true
 enabled = true
 
 [plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."browser-use@openai-bundled"]
 enabled = true
 
 # ---------------------------------------------------------------------------
@@ -111,8 +197,7 @@ full_disk_access = false
 writable_roots = [
   "/Users/user/.codex",
   "/Users/user/.docker/buildx",
-  "/Users/user/.cache",
-  "/tmp"
+  "/Users/user/.cache"
 ]
 
 # 読み取り禁止パターン
@@ -121,9 +206,6 @@ deny_read_patterns = [
   "**/node_modules/**",
   "**/.env",
   "**/.env.*",
-  "**/.env.local",
-  "**/.env.production",
-  "**/.env.development",
   "**/.npmrc",
   "**/.netrc",
   "**/.pypirc",
@@ -146,8 +228,6 @@ deny_read_patterns = [
 # ---------------------------------------------------------------------------
 # 危険コマンドのブロック
 # Claude Code の permissions.deny Bash(*) に相当
-# approval_mode = "suggest" で全コマンドが承認対象になるが、
-# 以下を明示的に拒否リストに追加することで二重に保護する
 # ---------------------------------------------------------------------------
 [shell]
 deny_commands = [
@@ -179,12 +259,12 @@ deny_commands = [
 ]
 
 [marketplaces.openai-bundled]
-last_updated = "2026-04-24T23:29:21Z"
+last_updated = "2026-05-01T20:22:35Z"
 source_type = "local"
 source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-04-23T18:55:30Z"
+last_updated = "2026-05-01T07:32:27Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 

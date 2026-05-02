@@ -134,6 +134,23 @@ function ranger-cd {
     rm -f -- "$tempfile"
 }
 
+function yazi() {
+  local cwd_file
+  local new_cwd
+
+  cwd_file="$(mktemp -t yazi-cwd.XXXXXX)"
+  command yazi --cwd-file "$cwd_file" "${@:-$(pwd)}"
+
+  if [[ -f "$cwd_file" ]]; then
+    new_cwd="$(cat -- "$cwd_file")"
+    if [[ -n "$new_cwd" && "$new_cwd" != "$PWD" ]]; then
+      cd -- "$new_cwd"
+    fi
+  fi
+
+  command rm -f -- "$cwd_file"
+}
+
 # random string (default length: 6)
 function randstr() {
   cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c ${1:-6}

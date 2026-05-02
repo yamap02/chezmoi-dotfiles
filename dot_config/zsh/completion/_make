@@ -1,0 +1,114 @@
+#compdef make gmake pmake dmake freebsd-make bmake
+
+_make_collect_local_targets() {
+  local base_dir=$1
+  local makefile_path=$2
+  local line lhs target
+  local -a targets
+  local -A seen
+
+  reply=()
+
+  [[ -n $makefile_path && -r $makefile_path ]] || return 1
+
+  while IFS= read -r line || [[ -n $line ]]; do
+    [[ $line == [[:space:]]# ]] && continue
+    [[ $line == \#* ]] && continue
+    [[ $line == *:=* || $line == *::=* || $line == *?=* || $line == *+=* ]] && continue
+    [[ $line == *:* ]] || continue
+
+    lhs=${line%%:*}
+    [[ $lhs == *'='* ]] && continue
+
+    for target in ${(z)lhs}; do
+      [[ $target == .PHONY ]] && continue
+      [[ $target == *'%'* ]] && continue
+      [[ $target == *'$('* || $target == *'${'* ]] && continue
+      [[ -n $target ]] || continue
+      [[ -n ${seen[$target]} ]] && continue
+      seen[$target]=1
+      targets+=("$target")
+    done
+  done < "$makefile_path"
+
+  reply=("${targets[@]}")
+}
+
+_make_resolve_local_makefile() {
+  local base_dir=$1
+
+  if [[ -r $base_dir/GNUmakefile ]]; then
+    reply=("$base_dir/GNUmakefile")
+    return 0
+  fi
+
+  if [[ -r $base_dir/makefile ]]; then
+    reply=("$base_dir/makefile")
+    return 0
+  fi
+
+  if [[ -r $base_dir/Makefile ]]; then
+    reply=("$base_dir/Makefile")
+    return 0
+  fi
+
+  reply=()
+  return 1
+}
+
+_make() {
+  local curcontext="$curcontext" state line expl
+  local base_dir=$PWD makefile_path arg
+  local -a option_specs
+
+  option_specs=(
+    '(-C --directory)'{-C+,--directory=}'[change directory first]:directory:_files -/'
+    '(-f --file --makefile)'{-f+,--file=,--makefile=}'[read specified file as a makefile]:makefile:_files'
+    '*:make target:->target'
+  )
+
+  _arguments -s $option_specs && return 0
+
+  case $state in
+    target)
+      for (( i = 1; i <= CURRENT; i++ )); do
+        arg=${words[i]}
+        case $arg in
+          -C)
+            (( i < CURRENT )) || break
+            base_dir=${words[i+1]}
+            (( i++ ))
+            ;;
+          --directory=*)
+            base_dir=${arg#--directory=}
+            ;;
+          -f)
+            (( i < CURRENT )) || break
+            makefile_path=${words[i+1]}
+            (( i++ ))
+            ;;
+          --file=*|--makefile=*)
+            makefile_path=${arg#*=}
+            ;;
+        esac
+      done
+
+      [[ $base_dir == /* ]] || base_dir=${PWD:A}/$base_dir
+
+      if [[ -n $makefile_path ]]; then
+        [[ $makefile_path == /* ]] || makefile_path=$base_dir/$makefile_path
+      else
+        _make_resolve_local_makefile "$base_dir" || return 1
+        makefile_path=$reply[1]
+      fi
+
+      _make_collect_local_targets "$base_dir" "$makefile_path" || return 1
+      (( $#reply )) || return 1
+
+      _describe -t targets 'make target' reply
+      return
+      ;;
+  esac
+
+  return 1
+}

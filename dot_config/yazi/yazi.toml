@@ -1,0 +1,28 @@
+# ranger からの移行ではキーマップを主対象にし、表示や操作は Yazi の既定を尊重する。
+#
+# 公式根拠:
+# - https://yazi-rs.github.io/docs/configuration/overview/
+# - https://github.com/sxyazi/yazi/tree/shipped/yazi-config/preset
+#
+# 既定値を明文化:
+# - font family / font size / line height は Yazi の設定項目に無いため、ターミナルエミュレータ側の設定に従う。
+# - 配色、アイコン、プレビュー見た目は `theme.toml` は未作成のため Yazi 既定のまま使う。
+# - ここでは公式 shipped preset の代表値を上書きせず既定のまま使う:
+#   - ratio = [1, 4, 3]
+#   - sort_by = "alphabetical"
+#   - sort_sensitive = false
+#   - sort_reverse = false
+#   - sort_dir_first = true
+#   - sort_translit = false
+#   - linemode = "none"
+#   - show_hidden = false
+#   - show_symlink = true
+#   - scrolloff = 5
+#   - wrap = "no"
+#   - tab_size = 2
+#   - max_width = 600
+#   - max_height = 900
+#   - image_delay = 30
+#   - image_filter = "triangle"
+#   - image_quality = 75
+# - 追加している挙動差分は `keymap.toml` と `plugins/smart-enter.yazi/` に限定する。
