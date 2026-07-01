@@ -1,12 +1,20 @@
 personality = "pragmatic"
-model = "gpt-5.4"
-model_reasoning_effort = "medium"
-approval_policy = { granular = { sandbox_approval = true, rules = true, mcp_elicitations = true, request_permissions = true, skill_approval = true } }
+model = "gpt-5.5"
+model_reasoning_effort = "low"
 approvals_reviewer = "user"
 sandbox_mode = "workspace-write"
 default_permissions = "safe-dev"
+notify = [
+    "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
+    "turn-ended",
+]
 
-notify = ["/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.770/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+[approval_policy.granular]
+sandbox_approval = true
+rules = true
+mcp_elicitations = true
+request_permissions = true
+skill_approval = true
 
 [auto_review]
 policy = """
@@ -19,7 +27,6 @@ Review approval requests conservatively.
 - Approve only narrowly scoped requests that stay within the current sandbox intent, preserve existing hardening, and are necessary to complete the user's stated task.
 - When uncertain, reject rather than approve.
 """
-
 developer_instructions = """
 Apply Claude-equivalent security constraints.
 
@@ -35,13 +42,12 @@ Apply Claude-equivalent security constraints.
 - Keep network usage minimal; prefer localhost. If external network access is required, ask first and restrict scope to the concrete allowed domain the user requested.
 """
 
-
 [sandbox_workspace_write]
 network_access = false
 writable_roots = [
-  "/Users/user/.codex",
-  "/Users/user/.docker/buildx",
-  "/Users/user/.cache"
+    "/Users/user/.codex",
+    "/Users/user/.docker/buildx",
+    "/Users/user/.cache",
 ]
 exclude_tmpdir_env_var = true
 exclude_slash_tmp = true
@@ -51,36 +57,29 @@ glob_scan_max_depth = 8
 "/Users/user/.codex" = "write"
 "/Users/user/.docker/buildx" = "write"
 "/Users/user/.cache" = "write"
-"/Users/user/Documents/**" = "none"
-"/Users/user/Downloads/**" = "none"
-"/Users/user/Library/**" = "none"
-"~/.ssh/**" = "none"
-"~/.aws/**" = "none"
-"~/.gnupg/**" = "none"
-"~/.npmrc" = "none"
-"~/.netrc" = "none"
-"~/.pypirc" = "none"
-"~/.docker/config.json" = "none"
+"/Users/user/Documents/**" = "deny"
+"/Users/user/Downloads/**" = "deny"
+"/Users/user/Library/**" = "deny"
+"~/.ssh/**" = "deny"
+"~/.aws/**" = "deny"
+"~/.gnupg/**" = "deny"
+"~/.npmrc" = "deny"
+"~/.netrc" = "deny"
+"~/.pypirc" = "deny"
+"~/.docker/config.json" = "deny"
 
 [permissions.safe-dev.filesystem.":project_roots"]
 "." = "write"
-"**/node_modules/**" = "none"
-"**/.env" = "none"
-"**/.env.*" = "none"
-"**/.npmrc" = "none"
-"**/.netrc" = "none"
-"**/.pypirc" = "none"
-"**/.docker/config.json" = "none"
-"**/.ssh/**" = "none"
-"**/.aws/**" = "none"
-"**/.gnupg/**" = "none"
-"**/*.pem" = "none"
-"**/*.key" = "none"
-"**/*_rsa" = "none"
-"**/*_ed25519" = "none"
-"**/*_dsa" = "none"
-"**/secrets*" = "none"
-"**/credentials" = "none"
+"node_modules/**" = "deny"
+".env" = "deny"
+".npmrc" = "deny"
+".netrc" = "deny"
+".pypirc" = "deny"
+".docker/config.json" = "deny"
+".ssh/**" = "deny"
+".aws/**" = "deny"
+".gnupg/**" = "deny"
+"credentials" = "deny"
 
 [permissions.safe-dev.network]
 enabled = false
@@ -156,6 +155,33 @@ trust_level = "trusted"
 [projects."/Users/user/Library/CloudStorage/GoogleDrive-pawapawa147@gmail.com/My Drive"]
 trust_level = "trusted"
 
+[projects."/Users/user/ai-dev/spec-test/demo"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/spec-test"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/matching"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/adk-docker-base"]
+trust_level = "trusted"
+
+[projects."/Users/user/Resilio Sync/aruma"]
+trust_level = "trusted"
+
+[projects."/Users/user/Downloads/eee"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/cloud-PM_kyou"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/stateless"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/GAS-app-bestpractice"]
+trust_level = "trusted"
+
 [notice.model_migrations]
 "gpt-5.2-codex" = "gpt-5.3-codex"
 
@@ -174,99 +200,169 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
-[plugins."browser-use@openai-bundled"]
+[plugins."browser@openai-bundled"]
 enabled = true
 
-# ---------------------------------------------------------------------------
-# サンドボックス設定
-# Claude Code の sandbox セクションに相当
-# ---------------------------------------------------------------------------
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [sandbox]
-
-# ネットワークアクセス制御
-# Claude Code: allowedDomains（外部ドメイン許可）+ allowLocalBinding = true
-# "localhost-only" = localhost / 127.0.0.1 のみ許可、外部通信はブロック
 network = "localhost-only"
-
-# ディスクアクセスを最小権限に制限
-# Claude Code の sandbox.filesystem に相当
 full_disk_access = false
-
-# 書き込み許可ディレクトリ（それ以外は読み取り専用）
-# Claude Code sandbox の write.allowOnly に相当
 writable_roots = [
-  "/Users/user/.codex",
-  "/Users/user/.docker/buildx",
-  "/Users/user/.cache"
+    "/Users/user/.codex",
+    "/Users/user/.docker/buildx",
+    "/Users/user/.cache",
 ]
-
-# 読み取り禁止パターン
-# Claude Code: sandbox.filesystem.denyRead + permissions.deny の Read/* に相当
 deny_read_patterns = [
-  "**/node_modules/**",
-  "**/.env",
-  "**/.env.*",
-  "**/.npmrc",
-  "**/.netrc",
-  "**/.pypirc",
-  "**/.docker/config.json",
-  "**/.ssh/**",
-  "**/.aws/**",
-  "**/.gnupg/**",
-  "**/*.pem",
-  "**/*.key",
-  "**/*_rsa",
-  "**/*_ed25519",
-  "**/*_dsa",
-  "**/secrets*",
-  "**/credentials",
-  "/Users/user/Documents/**",
-  "/Users/user/Downloads/**",
-  "/Users/user/Library/**"
+    "**/node_modules/**",
+    "**/.env",
+    "**/.env.*",
+    "**/.npmrc",
+    "**/.netrc",
+    "**/.pypirc",
+    "**/.docker/config.json",
+    "**/.ssh/**",
+    "**/.aws/**",
+    "**/.gnupg/**",
+    "**/*.pem",
+    "**/*.key",
+    "**/*_rsa",
+    "**/*_ed25519",
+    "**/*_dsa",
+    "**/secrets*",
+    "**/credentials",
+    "/Users/user/Documents/**",
+    "/Users/user/Downloads/**",
+    "/Users/user/Library/**",
 ]
 
-# ---------------------------------------------------------------------------
-# 危険コマンドのブロック
-# Claude Code の permissions.deny Bash(*) に相当
-# ---------------------------------------------------------------------------
 [shell]
 deny_commands = [
-  "rm -rf",
-  "sudo",
-  "git push --force",
-  "git push -f",
-  "curl",          # localhost向けは sandbox.network で許可済み
-  "wget",
-  "brew",
-  "env",
-  "printenv",
-  "osascript",
-  "crontab",
-  "ssh",
-  "scp",
-  "nc",
-  "ncat",
-  "npm install -g",
-  "pip install",
-  "pip3 install",
-  "git config --global",
-  "git config --system",
-  "gh auth",
-  "chmod +s",
-  "history",
-  "launchctl",
-  "defaults write"
+    "rm -rf",
+    "sudo",
+    "git push --force",
+    "git push -f",
+    "curl",
+    "wget",
+    "brew",
+    "env",
+    "printenv",
+    "osascript",
+    "crontab",
+    "ssh",
+    "scp",
+    "nc",
+    "ncat",
+    "npm install -g",
+    "pip install",
+    "pip3 install",
+    "git config --global",
+    "git config --system",
+    "gh auth",
+    "chmod +s",
+    "history",
+    "launchctl",
+    "defaults write",
 ]
 
 [marketplaces.openai-bundled]
-last_updated = "2026-05-01T20:22:35Z"
+last_updated = "2026-07-01T07:14:33Z"
 source_type = "local"
 source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-05-01T07:32:27Z"
+last_updated = "2026-07-01T07:16:51Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [features]
 memories = true
+goals = true
+js_repl = false
+
+[tui]
+status_line = [
+    "model-with-reasoning",
+    "current-dir",
+    "model",
+    "project-name",
+    "git-branch",
+    "pull-request-number",
+    "branch-changes",
+    "run-state",
+    "context-remaining",
+    "context-used",
+    "five-hour-limit",
+    "weekly-limit",
+    "context-window-size",
+    "used-tokens",
+    "total-input-tokens",
+    "total-output-tokens",
+]
+status_line_use_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[desktop]
+appearanceTheme = "light"
+usePointerCursors = true
+localeOverride = "en-US"
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+notifications-turn-mode = "always"
+dock-icon-preference = "codex-light"
+followUpQueueMode = "queue"
+
+[desktop.appearanceLightChromeTheme]
+accent = "#339cff"
+contrast = 20
+ink = "#1a1c1f"
+opaqueWindows = false
+surface = "#ffffff"
+
+[desktop.appearanceLightChromeTheme.fonts]
+
+[desktop.appearanceLightChromeTheme.semanticColors]
+diffAdded = "#00a240"
+diffRemoved = "#ba2623"
+skill = "#924ff7"
+
+[desktop.open-in-target-preferences]
+global = "zed"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
+CODEX_HOME = "/Users/user/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "cb79053fda6deb0f3b5d6f0d90d4257305ebdbd1e378a12e8fbc5bde782eb59b"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.623.81905"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+
+[memories]
+generate_memories = true
+use_memories = true
+
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1"
