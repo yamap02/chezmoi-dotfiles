@@ -4,18 +4,20 @@
 
 ## ファイル構成
 
-- `yazi.toml`: キーマップ以外の既定値を明文化するためのメモを置いています。挙動を変える設定はまだ追加していません。
-- `keymap.toml`: `ranger` の主要キーマップ移植先です。
+- `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整と、macOS の media opener を `IINA` に固定する差分だけを入れています。
+- `keymap.toml`: `ranger` の主要キーマップ移植先です。`q` / `Q` / `<Esc>` は `zsh` wrapper の `cwd` 同期を壊さないよう `quit` のまま上書きし、`dD` は確認なしで処理するようにしています。
 - `plugins/smart-enter.yazi/main.lua`: `ranger` の `l` / `Enter` に近づけるため、ディレクトリなら入る・ファイルなら開く `smart-enter` をローカル実装しています。
 - `tests/test_keymap.py`: 主要キーマップが壊れていないかを確認する回帰テストです。
-- `../zsh/function.zsh`: `yazi` 終了後にターミナル側も移動先ディレクトリへ追従させる shell wrapper です。
+- `../zsh/function.zsh`: `yazi` 終了後にターミナル側も移動先ディレクトリへ追従させる shell wrapper です。`--cwd-file` を読む前提なので、終了キーで `--no-cwd-file` を使わないこともこのディレクトリの契約です。
 
 ## 反映した主な互換
 
-- 移動: `h/j/k/l`, `H/L`, `J/K`, `<Enter>`
+- 終了と移動: `q`, `Q`, `<Esc>`, `h/j/k/l`, `H/L`, `J/K`, `<Enter>`
 - 検索と絞り込み: `/`, `n`, `N`, `f`
 - 選択: `<Space>`, `v`, `uv`, `V`, `uV`
-- コピー系: `yy`, `dd`, `pp`, `dD`, `cw`
+- コピー系: `yy`, `dd`, `pp`, `dD`, `a`, `cw`
+- `q` / `Q` / `<Esc>`: 終了後も shell 側の `cwd` 同期を維持したまま終了
+- `dD`: 確認なしでゴミ箱へ送る
 - パスコピー: `yp`, `yd`, `yn`, `y.`
 - タブ: `gn`, `gc`, `<Tab>`, `<BackTab>`
 - ソートと表示: `on`, `om`, `os`, `or`, `zh`, `<C-h>`
@@ -32,9 +34,13 @@
 
 `font family` / `font size` / `line height` は、公式の `yazi.toml` 設定項目に存在しないため、Yazi ではなくターミナルエミュレータ側の設定に従います。これは公式 docs からの推論で、`yazi` 側では上書きしていません。
 
-現在このディレクトリで既定値のまま使っている代表項目:
+現在このディレクトリで意図的に変えている一般設定:
 
-- `ratio = [1, 4, 3]`
+- `mgr.ratio = [1, 3, 4]`
+- `[opener].play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]`
+
+それ以外で既定値のまま使っている代表項目:
+
 - `sort_by = "alphabetical"`
 - `sort_sensitive = false`
 - `sort_reverse = false`
@@ -53,12 +59,12 @@
 - `image_quality = 75`
 
 配色・アイコン・プレビュー見た目は `theme.toml` を作っていないため、公式 shipped preset の dark/light theme 既定値をそのまま使います。
+media open は macOS 既定の `open %s` をそのまま使わず、`open -a IINA %s` で `IINA` に明示的に渡します。
 
 キーマップは `keymap.toml` で `prepend_keymap` を使っているため、ここで明示していないキーは公式 shipped preset の `keymap-default.toml` を維持します。つまり custom key は既存 default keymap の前に差し込まれ、未定義キーを潰しません。
 
 現在も有効な公式 default keymap の代表例:
 
-- `q`: quit
 - `o` / `O`: open / open interactive
 - `y` / `x` / `p`: yank copy / yank cut / paste
 - `.`: hidden toggle
@@ -67,7 +73,7 @@
 - `,a` `,n` `,m` `,s`: alphabetical / natural / mtime / size sort
 - `t`, `1..9`, `[` / `]`: tab create, numbered tab switch, previous/next tab
 
-- 独自差分: 明示的に変更しているのは `keymap.toml` と `plugins/smart-enter.yazi/main.lua` のみです。
+- 独自差分: 明示的に変更しているのは `keymap.toml`、`[mgr].ratio`、`[opener].play`、`plugins/smart-enter.yazi/main.lua` です。`keymap.toml` では `q` / `Q` / `<Esc>` を `quit` にそろえ、`../zsh/function.zsh` の `--cwd-file` 連携を壊さないことを優先しています。
 
 font size のような表示系を変更したくなった場合は、まず `yazi` ではなく使用中のターミナルエミュレータ側設定を見ます。そのうえで Yazi 側にも設定を追加したら、この節と `yazi.toml` のメモを同時に更新します。
 

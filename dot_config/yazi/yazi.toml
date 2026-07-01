@@ -4,11 +4,24 @@
 # - https://yazi-rs.github.io/docs/configuration/overview/
 # - https://github.com/sxyazi/yazi/tree/shipped/yazi-config/preset
 #
+[mgr]
+# `manager` は現行 Yazi では非推奨なので、`mgr` 側でプレビュー幅を上書きする。
+# 既定の `ratio = [1, 4, 3]` から、プレビュー欄だけ少し広げる。
+ratio = [1, 3, 4]
+
+[opener]
+# macOS で media を開くときだけ、システム既定ではなく IINA を使う。
+play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]
+
+[preview]
+# 画像 preview のキャッシュ生成量を抑える。
+max_width = 480
+max_height = 720
+
 # 既定値を明文化:
 # - font family / font size / line height は Yazi の設定項目に無いため、ターミナルエミュレータ側の設定に従う。
 # - 配色、アイコン、プレビュー見た目は `theme.toml` は未作成のため Yazi 既定のまま使う。
-# - ここでは公式 shipped preset の代表値を上書きせず既定のまま使う:
-#   - ratio = [1, 4, 3]
+# - ここでは `ratio` だけ `preview` を少し広げ、macOS の media opener だけ IINA に差し替える。それ以外は公式 shipped preset の代表値を既定のまま使う:
 #   - sort_by = "alphabetical"
 #   - sort_sensitive = false
 #   - sort_reverse = false
@@ -25,4 +38,5 @@
 #   - image_delay = 30
 #   - image_filter = "triangle"
 #   - image_quality = 75
-# - 追加している挙動差分は `keymap.toml` と `plugins/smart-enter.yazi/` に限定する。
+# - media open は既定の `open %s` ではなく `open -a IINA %s` を使う。
+# - 追加している挙動差分は `keymap.toml`、`[mgr].ratio`、`[opener].play`、`plugins/smart-enter.yazi/` に限定する。

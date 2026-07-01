@@ -1,12 +1,17 @@
 [[mgr.prepend_keymap]]
+on = "q"
+run = "quit"
+desc = "Quit Yazi and keep cwd sync enabled"
+
+[[mgr.prepend_keymap]]
 on = "Q"
-run = "quit --no-cwd-file"
-desc = "Quit Yazi"
+run = "quit"
+desc = "Quit Yazi and keep cwd sync enabled"
 
 [[mgr.prepend_keymap]]
 on = "<Esc>"
-run = "quit --no-cwd-file"
-desc = "Quit Yazi"
+run = "quit"
+desc = "Quit Yazi and keep cwd sync enabled"
 
 [[mgr.prepend_keymap]]
 on = "S"
@@ -95,8 +100,8 @@ desc = "Filter files"
 
 [[mgr.prepend_keymap]]
 on = "<Space>"
-run = "toggle"
-desc = "Toggle selection"
+run = ["toggle", "arrow 1"]
+desc = "Toggle selection and move down"
 
 [[mgr.prepend_keymap]]
 on = "v"
@@ -165,12 +170,17 @@ desc = "Paste yanked files"
 
 [[mgr.prepend_keymap]]
 on = [ "d", "D" ]
-run = "remove"
-desc = "Trash selection"
+run = "remove --force"
+desc = "Trash selection without confirmation"
+
+[[mgr.prepend_keymap]]
+on = "a"
+run = "rename --cursor=before_ext"
+desc = "Rename hovered or selected files"
 
 [[mgr.prepend_keymap]]
 on = [ "c", "w" ]
-run = "rename"
+run = "rename --cursor=before_ext"
 desc = "Rename hovered or selected files"
 
 [[mgr.prepend_keymap]]

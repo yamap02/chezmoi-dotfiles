@@ -22,6 +22,11 @@ def load_keymap():
     return {normalize_key(entry["on"]): entry["run"] for entry in entries}
 
 
+def load_yazi_config():
+    with (YAZI_DIR / "yazi.toml").open("rb") as fh:
+        return tomllib.load(fh)
+
+
 class YaziKeymapMigrationTest(unittest.TestCase):
     def test_expected_files_exist(self):
         self.assertTrue(KEYMAP_PATH.exists(), "keymap.toml が未作成")
@@ -30,6 +35,9 @@ class YaziKeymapMigrationTest(unittest.TestCase):
 
     def test_core_navigation_keymap_matches_ranger(self):
         keymap = load_keymap()
+        self.assertEqual(keymap[("q",)], "quit")
+        self.assertEqual(keymap[("Q",)], "quit")
+        self.assertEqual(keymap[("<Esc>",)], "quit")
         self.assertEqual(keymap[("h",)], "leave")
         self.assertEqual(keymap[("j",)], "arrow 1")
         self.assertEqual(keymap[("k",)], "arrow -1")
@@ -40,13 +48,19 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         self.assertEqual(keymap[("J",)], "arrow 50%")
         self.assertEqual(keymap[("K",)], "arrow -50%")
 
+    def test_quit_keymap_keeps_cwd_file_integration_enabled(self):
+        keymap = load_keymap()
+        for key in (("q",), ("Q",), ("<Esc>",)):
+            self.assertEqual(keymap[key], "quit")
+            self.assertNotIn("--no-cwd-file", keymap[key])
+
     def test_search_selection_and_clipboard_keymap_matches_ranger(self):
         keymap = load_keymap()
         self.assertEqual(keymap[("/",)], "find --smart")
         self.assertEqual(keymap[("n",)], "find_arrow")
         self.assertEqual(keymap[("N",)], "find_arrow --previous")
         self.assertEqual(keymap[("f",)], "filter --smart")
-        self.assertEqual(keymap[("<Space>",)], "toggle")
+        self.assertEqual(keymap[("<Space>",)], ["toggle", "arrow 1"])
         self.assertEqual(keymap[("v",)], "toggle_all")
         self.assertEqual(keymap[("u", "v")], "toggle_all --state=off")
         self.assertEqual(keymap[("V",)], "visual_mode")
@@ -63,8 +77,9 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         self.assertEqual(keymap[("u", "d")], "unyank")
         self.assertEqual(keymap[("u", "y")], "unyank")
         self.assertEqual(keymap[("p", "p")], "paste")
-        self.assertEqual(keymap[("d", "D")], "remove")
-        self.assertEqual(keymap[("c", "w")], "rename")
+        self.assertEqual(keymap[("d", "D")], "remove --force")
+        self.assertEqual(keymap[("a",)], "rename --cursor=before_ext")
+        self.assertEqual(keymap[("c", "w")], "rename --cursor=before_ext")
         self.assertEqual(keymap[("g", "n")], "tab_create ~")
         self.assertEqual(keymap[("g", "c")], "close")
         self.assertEqual(keymap[("<Tab>",)], "tab_switch 1 --relative")
@@ -100,15 +115,18 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         self.assertIn("ranger", text)
         self.assertIn("smart-enter", text)
         self.assertIn("keymap.toml", text)
+        self.assertIn("確認なし", text)
 
     def test_readme_documents_default_backed_settings(self):
         text = README_PATH.read_text(encoding="utf-8")
         self.assertIn("既定値を明文化", text)
         self.assertIn("yazi-rs.github.io/docs/configuration/overview", text)
         self.assertIn("shipped tag", text)
+        self.assertIn("IINA", text)
+        self.assertIn("open -a IINA %s", text)
         self.assertIn("font size", text)
         self.assertIn("ターミナルエミュレータ側", text)
-        self.assertIn("ratio = [1, 4, 3]", text)
+        self.assertIn("ratio = [1, 3, 4]", text)
         self.assertIn('sort_by = "alphabetical"', text)
         self.assertIn("show_hidden = false", text)
         self.assertIn("tab_size = 2", text)
@@ -122,11 +140,29 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         self.assertIn("font size", text)
         self.assertIn("ターミナルエミュレータ側", text)
         self.assertIn("theme.toml", text)
-        self.assertIn("ratio = [1, 4, 3]", text)
+        self.assertIn("ratio = [1, 3, 4]", text)
         self.assertIn('sort_by = "alphabetical"', text)
         self.assertIn("show_hidden = false", text)
         self.assertIn("tab_size = 2", text)
-        self.assertIn("既定のまま使う", text)
+        self.assertIn("プレビュー欄だけ少し広げる", text)
+
+    def test_preview_ratio_is_slightly_wider_than_default(self):
+        config = load_yazi_config()
+        self.assertEqual(config["mgr"]["ratio"], [1, 3, 4])
+
+    def test_media_opener_uses_iina_on_macos(self):
+        config = load_yazi_config()
+        self.assertIn("opener", config)
+        self.assertIn("play", config["opener"])
+
+        self.assertIn(
+            {
+                "run": "open -a IINA %s",
+                "desc": "IINA",
+                "for": "macos",
+            },
+            config["opener"]["play"],
+        )
 
 
 if __name__ == "__main__":
