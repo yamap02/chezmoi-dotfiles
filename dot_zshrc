@@ -31,6 +31,16 @@
 #
 # autoload colors
 
+cdf() {
+  local repo dir
+
+  repo="$(ghq list -p | fzf --prompt='repo> ')" || return
+  dir="$(fd --type d --hidden --exclude .git . "$repo" \
+    | fzf --prompt='dir> ')" || return
+
+  cd "$dir"
+}
+
 fbr() {
   local branches branch
   branches=$(git branch -vv) &&

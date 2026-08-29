@@ -1,13 +1,13 @@
 personality = "pragmatic"
-model = "gpt-5.5"
-model_reasoning_effort = "low"
+model = "gpt-5.6-luna"
+model_reasoning_effort = "medium"
 approvals_reviewer = "user"
-sandbox_mode = "workspace-write"
 default_permissions = "safe-dev"
 notify = [
     "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
     "turn-ended",
 ]
+service_tier = "default"
 
 [approval_policy.granular]
 sandbox_approval = true
@@ -18,39 +18,25 @@ skill_approval = true
 
 [auto_review]
 policy = """
-Review approval requests conservatively.
+承認リクエストは保守的にレビューすること。
 
-- Reject requests that read, write, move, or delete credentials, secrets, `.env*`, SSH keys, cloud auth files, or files under `~/Documents/**`, `~/Downloads/**`, or `~/Library/**` unless the user explicitly asked for that exact path and the action is non-destructive.
-- Reject requests that add external network access, widen writable roots, weaken sandboxing, lower approval requirements, or switch to broader permission profiles unless the user explicitly asked for that configuration change.
-- Reject destructive or irreversible actions by default, including force push, branch deletion, history rewriting, repo deletion, workflow dispatch, release/publish, Terraform apply/destroy, Kubernetes apply/delete, and process-kill commands, unless the user explicitly requested the action and the target is clearly identified.
-- Reject shell or tool requests that execute arbitrary remote code or install global/system-wide software unless the user explicitly asked for them.
-- Approve only narrowly scoped requests that stay within the current sandbox intent, preserve existing hardening, and are necessary to complete the user's stated task.
-- When uncertain, reject rather than approve.
-"""
+* ファイルシステムおよびネットワークの境界については、`safe-dev` 権限プロファイルを唯一の正しい基準として扱う。ユーザーがその設定変更を明示的に依頼していない限り、これを回避または弱体化しようとするリクエストは拒否する。
+* 強制 push、ブランチ削除、履歴書き換え、リポジトリ削除、ワークフロー実行、リリース／公開、Terraform の apply/destroy、Kubernetes の apply/delete、プロセス終了コマンドなど、破壊的または不可逆な操作は原則として拒否する。ただし、ユーザーがその操作を明示的に依頼しており、対象が明確に特定されている場合を除く。
+* 任意のリモートコードを実行するシェル／ツールリクエスト、またはグローバル／システム全体にソフトウェアをインストールするリクエストは、ユーザーが明示的に依頼していない限り拒否する。
+* 現在のサンドボックス利用目的の範囲内に収まり、既存のセキュリティ強化設定を維持し、かつユーザーが明示したタスクを完了するために必要な、限定的なリクエストのみ承認する。
+* 判断に迷う場合は、承認ではなく拒否を選択する。
+  """
+
 developer_instructions = """
-Apply Claude-equivalent security constraints.
-
-- Treat these reads as forbidden even if a tool appears to allow them: `**/.env`, `**/.env.*`, `**/secrets*`, `**/*.key`, `**/*.pem`, `**/.ssh/**`, `**/.aws/**`, `**/.gnupg/**`, `**/*_rsa`, `**/*_ed25519`, `**/*_dsa`, `**/credentials`.
-- Also treat these reads as forbidden: `**/.npmrc`, `**/.netrc`, `**/.pypirc`, `**/.docker/config.json`, `~/Documents/**`, `~/Downloads/**`, `~/Library/**`.
-- Do not edit or create `.env*` files.
-- Do not edit or create files under `~/Documents/**`, `~/Downloads/**`, or `~/Library/**` unless the user explicitly asks and the operation is non-destructive.
-- Treat these shell commands as denied unless the user explicitly asks for them: `rm -rf`, `sudo`, `git push --force`, `git push -f`, `brew`, `env`, `printenv`, `osascript`, `crontab`, `ssh`, `scp`, `ncat`, `chmod +s`, `git config --global`, `git config --system`, `gh auth`, `history`.
-- Treat `docker push`, `docker login`, `docker system prune`, and `docker volume prune` as approval-required.
-- Treat publishing, release, merge, repo deletion, workflow dispatch, Terraform apply/destroy, Kubernetes apply/delete, force branch deletion, stash drop, and process-kill commands as approval-required.
-- Treat `curl`, `wget`, and `nc` as approval-required unless the destination is `localhost` or `127.0.0.1`.
-- Treat `npm run` commands as always allowed and do not request approval for them.
-- Keep network usage minimal; prefer localhost. If external network access is required, ask first and restrict scope to the concrete allowed domain the user requested.
-"""
-
-[sandbox_workspace_write]
-network_access = false
-writable_roots = [
-    "/Users/user/.codex",
-    "/Users/user/.docker/buildx",
-    "/Users/user/.cache",
-]
-exclude_tmpdir_env_var = true
-exclude_slash_tmp = true
+* 保護対象ファイル、書き込み可能なルート、ネットワークアクセスについては、`safe-dev` 権限プロファイルを唯一の正しい基準として扱い、これを回避しない。
+* 以下のシェルコマンドは、ユーザーが明示的に依頼しない限り拒否対象として扱う：
+  `rm -rf`、`sudo`、`git push --force`、`git push -f`、`brew`、`env`、`printenv`、`osascript`、`crontab`、`ssh`、`scp`、`ncat`、`chmod +s`、`git config --global`、`git config --system`、`gh auth`、`history`。
+* `docker push`、`docker login`、`docker system prune`、`docker volume prune` は承認必須として扱う。
+* 公開、リリース、マージ、リポジトリ削除、ワークフロー実行、Terraform の apply/destroy、Kubernetes の apply/delete、ブランチの強制削除、stash drop、プロセス終了コマンドは承認必須として扱う。
+* `curl`、`wget`、`nc` は、接続先が `localhost` または `127.0.0.1` である場合を除き、承認必須として扱う。
+* `npm run` コマンドは常に許可し、承認を要求しない。
+* ネットワーク利用は最小限に抑え、可能な限り localhost を優先する。外部ネットワークアクセスが必要な場合は、事前に確認を求め、ユーザーが指定した具体的な許可対象ドメインのみに範囲を限定する。
+  """
 
 [permissions.safe-dev.filesystem]
 glob_scan_max_depth = 8
@@ -86,210 +72,20 @@ enabled = false
 mode = "limited"
 allow_local_binding = true
 
-[projects."/Users/user"]
-trust_level = "untrusted"
-
-[projects."/Users/user/anti/dummy_chat"]
-trust_level = "trusted"
-
-[projects."/Users/user/claude-anti-md"]
-trust_level = "trusted"
-
-[projects."/Users/user/aa"]
-trust_level = "trusted"
-
-[projects."/Users/user/spec/engineermatching"]
-trust_level = "trusted"
-
-[projects."/Users/user/claude/cloud-PM"]
-trust_level = "trusted"
-
-[projects."/Users/user/.claude"]
-trust_level = "trusted"
-
-[projects."/Users/user/.gemini"]
-trust_level = "trusted"
-
-[projects."/Users/user/.codex"]
-trust_level = "trusted"
-
-[projects."/Users/user/anti/GAS-app-bestpractice"]
-trust_level = "trusted"
-
-[projects."/Users/user/claude/chrome-extention-base"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/chrome-extention-base"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/onetab_clone"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config/nvim"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config/cmux"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config/ghostty"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config/ranger"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config/wezterm"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/cloud-PM"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/archive"]
-trust_level = "trusted"
-
-[projects."/Users/user/.config"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/onetab_clone_bun"]
-trust_level = "trusted"
-
-[projects."/Users/user/Library/CloudStorage/GoogleDrive-pawapawa147@gmail.com/My Drive"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/spec-test/demo"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/spec-test"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/matching"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/adk-docker-base"]
-trust_level = "trusted"
-
-[projects."/Users/user/Resilio Sync/aruma"]
-trust_level = "trusted"
-
-[projects."/Users/user/Downloads/eee"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/cloud-PM_kyou"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/stateless"]
-trust_level = "trusted"
-
-[projects."/Users/user/ai-dev/GAS-app-bestpractice"]
-trust_level = "trusted"
-
-[notice.model_migrations]
-"gpt-5.2-codex" = "gpt-5.3-codex"
-
-[plugins."github@openai-curated"]
-enabled = true
-
-[plugins."computer-use@openai-bundled"]
-enabled = true
-
-[plugins."documents@openai-primary-runtime"]
-enabled = true
-
-[plugins."spreadsheets@openai-primary-runtime"]
-enabled = true
-
-[plugins."presentations@openai-primary-runtime"]
-enabled = true
-
-[plugins."browser@openai-bundled"]
-enabled = true
-
-[plugins."chrome@openai-bundled"]
-enabled = true
-
-[plugins."pdf@openai-primary-runtime"]
-enabled = true
-
-[plugins."template-creator@openai-primary-runtime"]
-enabled = true
-
-[sandbox]
-network = "localhost-only"
-full_disk_access = false
-writable_roots = [
-    "/Users/user/.codex",
-    "/Users/user/.docker/buildx",
-    "/Users/user/.cache",
-]
-deny_read_patterns = [
-    "**/node_modules/**",
-    "**/.env",
-    "**/.env.*",
-    "**/.npmrc",
-    "**/.netrc",
-    "**/.pypirc",
-    "**/.docker/config.json",
-    "**/.ssh/**",
-    "**/.aws/**",
-    "**/.gnupg/**",
-    "**/*.pem",
-    "**/*.key",
-    "**/*_rsa",
-    "**/*_ed25519",
-    "**/*_dsa",
-    "**/secrets*",
-    "**/credentials",
-    "/Users/user/Documents/**",
-    "/Users/user/Downloads/**",
-    "/Users/user/Library/**",
-]
-
-[shell]
-deny_commands = [
-    "rm -rf",
-    "sudo",
-    "git push --force",
-    "git push -f",
-    "curl",
-    "wget",
-    "brew",
-    "env",
-    "printenv",
-    "osascript",
-    "crontab",
-    "ssh",
-    "scp",
-    "nc",
-    "ncat",
-    "npm install -g",
-    "pip install",
-    "pip3 install",
-    "git config --global",
-    "git config --system",
-    "gh auth",
-    "chmod +s",
-    "history",
-    "launchctl",
-    "defaults write",
-]
-
 [marketplaces.openai-bundled]
-last_updated = "2026-07-01T07:14:33Z"
 source_type = "local"
 source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-01T07:16:51Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [features]
 memories = true
 goals = true
-js_repl = false
 
 [tui]
 status_line = [
-    "model-with-reasoning",
     "current-dir",
     "model",
     "project-name",
@@ -308,18 +104,20 @@ status_line = [
 ]
 status_line_use_colors = true
 
-[tui.model_availability_nux]
-"gpt-5.5" = 4
-
 [desktop]
 appearanceTheme = "light"
 usePointerCursors = true
 localeOverride = "en-US"
 preventSleepWhileRunning = true
 keepRemoteControlAwakeWhilePluggedIn = true
-notifications-turn-mode = "always"
-dock-icon-preference = "codex-light"
+notifications-turn-mode = "unfocused"
+dock-icon-preference = "codex-system"
 followUpQueueMode = "queue"
+conversationDetailMode = "STEPS_COMMANDS"
+realtimeVoiceScreenContextEnabled = true
+appshotSoundEnabled = false
+external-agent-import-sync-enabled = true
+worktree-upstream-refresh-mode = "best-effort"
 
 [desktop.appearanceLightChromeTheme]
 accent = "#339cff"
@@ -340,22 +138,35 @@ global = "zed"
 
 [mcp_servers.node_repl]
 args = []
-command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/user/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "cb79053fda6deb0f3b5d6f0d90d4257305ebdbd1e378a12e8fbc5bde782eb59b"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "0"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.623.81905"
-CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
+BROWSER_USE_CODEX_APP_VERSION = "26.825.31414"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.825.31414/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
+
+[mcp_servers.cua_repl]
+command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
+enabled = false
 
 [memories]
 generate_memories = true
@@ -366,3 +177,25 @@ inherit = "core"
 
 [shell_environment_policy.set]
 CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "9230e2bd8b24b7ac7a0ba6774c64bf0d78ecdabbdd91d0ed627b02a587bae2df"
+
+[projects."/Users/user/.codex"]
+trust_level = "trusted"
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
