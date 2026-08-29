@@ -61,6 +61,9 @@ mouse-hide-while-typing = true
 # 通知（Claude Code用）
 bell-features = title,attention
 
+keybind = super+j=text:\x0a
+keybind = super+k=text:\x0b
+
 # 垂直分割（右にペインを追加）
 # Cmd+D
 
