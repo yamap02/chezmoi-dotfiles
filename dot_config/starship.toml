@@ -1,0 +1,4 @@
+# Keep the active gcloud context available to gcloud itself without exposing
+# the authenticated account email in the shell prompt.
+[gcloud]
+disabled = true
