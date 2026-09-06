@@ -17,6 +17,8 @@ play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]
 # 画像 preview のキャッシュ生成量を抑える。
 max_width = 480
 max_height = 720
+# Markdown などの長い行をプレビュー欄の幅で折り返す。
+wrap = "yes"
 
 # 既定値を明文化:
 # - font family / font size / line height は Yazi の設定項目に無いため、ターミナルエミュレータ側の設定に従う。
@@ -31,7 +33,7 @@ max_height = 720
 #   - show_hidden = false
 #   - show_symlink = true
 #   - scrolloff = 5
-#   - wrap = "no"
+#   - wrap = "yes"
 #   - tab_size = 2
 #   - max_width = 600
 #   - max_height = 900

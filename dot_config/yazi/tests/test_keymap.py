@@ -150,6 +150,10 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         config = load_yazi_config()
         self.assertEqual(config["mgr"]["ratio"], [1, 3, 4])
 
+    def test_preview_wraps_long_lines(self):
+        config = load_yazi_config()
+        self.assertEqual(config["preview"]["wrap"], "yes")
+
     def test_media_opener_uses_iina_on_macos(self):
         config = load_yazi_config()
         self.assertIn("opener", config)

@@ -4,7 +4,7 @@
 
 ## ファイル構成
 
-- `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整と、macOS の media opener を `IINA` に固定する差分だけを入れています。
+- `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整、長い行の折り返し、macOS の media opener を `IINA` に固定する差分を入れています。
 - `keymap.toml`: `ranger` の主要キーマップ移植先です。`q` / `Q` / `<Esc>` は `zsh` wrapper の `cwd` 同期を壊さないよう `quit` のまま上書きし、`dD` は確認なしで処理するようにしています。
 - `plugins/smart-enter.yazi/main.lua`: `ranger` の `l` / `Enter` に近づけるため、ディレクトリなら入る・ファイルなら開く `smart-enter` をローカル実装しています。
 - `tests/test_keymap.py`: 主要キーマップが壊れていないかを確認する回帰テストです。
@@ -37,6 +37,7 @@
 現在このディレクトリで意図的に変えている一般設定:
 
 - `mgr.ratio = [1, 3, 4]`
+- `preview.wrap = "yes"`（長い行をプレビュー欄の幅で折り返す）
 - `[opener].play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]`
 
 それ以外で既定値のまま使っている代表項目:
@@ -50,7 +51,7 @@
 - `show_hidden = false`
 - `show_symlink = true`
 - `scrolloff = 5`
-- `wrap = "no"`
+- `wrap = "yes"`
 - `tab_size = 2`
 - `max_width = 600`
 - `max_height = 900`
