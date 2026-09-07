@@ -150,6 +150,10 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         config = load_yazi_config()
         self.assertEqual(config["mgr"]["ratio"], [1, 3, 4])
 
+    def test_preview_wraps_long_lines(self):
+        config = load_yazi_config()
+        self.assertEqual(config["preview"]["wrap"], "yes")
+
     def test_media_opener_uses_iina_on_macos(self):
         config = load_yazi_config()
         self.assertIn("opener", config)
@@ -162,6 +166,21 @@ class YaziKeymapMigrationTest(unittest.TestCase):
                 "for": "macos",
             },
             config["opener"]["play"],
+        )
+
+    def test_html_opener_uses_default_browser_on_macos(self):
+        config = load_yazi_config()
+        self.assertIn(
+            {
+                "run": "open %s",
+                "desc": "Browser",
+                "for": "macos",
+            },
+            config["opener"]["browser"],
+        )
+        self.assertEqual(
+            config["open"]["rules"],
+            [{"mime": "text/html", "use": "browser"}],
         )
 
 

@@ -4,7 +4,7 @@
 
 ## ファイル構成
 
-- `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整と、macOS の media opener を `IINA` に固定する差分だけを入れています。
+- `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整、長い行の折り返し、macOS の media opener を `IINA` に固定する差分、HTML を既定ブラウザーで開く差分を入れています。
 - `keymap.toml`: `ranger` の主要キーマップ移植先です。`q` / `Q` / `<Esc>` は `zsh` wrapper の `cwd` 同期を壊さないよう `quit` のまま上書きし、`dD` は確認なしで処理するようにしています。
 - `plugins/smart-enter.yazi/main.lua`: `ranger` の `l` / `Enter` に近づけるため、ディレクトリなら入る・ファイルなら開く `smart-enter` をローカル実装しています。
 - `tests/test_keymap.py`: 主要キーマップが壊れていないかを確認する回帰テストです。
@@ -37,7 +37,9 @@
 現在このディレクトリで意図的に変えている一般設定:
 
 - `mgr.ratio = [1, 3, 4]`
+- `preview.wrap = "yes"`（長い行をプレビュー欄の幅で折り返す）
 - `[opener].play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]`
+- `[open].rules` の `text/html` は `browser` opener（macOS の `open %s`）へ渡す
 
 それ以外で既定値のまま使っている代表項目:
 
@@ -50,7 +52,7 @@
 - `show_hidden = false`
 - `show_symlink = true`
 - `scrolloff = 5`
-- `wrap = "no"`
+- `wrap = "yes"`
 - `tab_size = 2`
 - `max_width = 600`
 - `max_height = 900`
@@ -60,6 +62,7 @@
 
 配色・アイコン・プレビュー見た目は `theme.toml` を作っていないため、公式 shipped preset の dark/light theme 既定値をそのまま使います。
 media open は macOS 既定の `open %s` をそのまま使わず、`open -a IINA %s` で `IINA` に明示的に渡します。
+HTML open は macOS の `open %s` に渡すため、システムで設定された既定ブラウザーが起動します。
 
 キーマップは `keymap.toml` で `prepend_keymap` を使っているため、ここで明示していないキーは公式 shipped preset の `keymap-default.toml` を維持します。つまり custom key は既存 default keymap の前に差し込まれ、未定義キーを潰しません。
 
@@ -73,7 +76,7 @@ media open は macOS 既定の `open %s` をそのまま使わず、`open -a IIN
 - `,a` `,n` `,m` `,s`: alphabetical / natural / mtime / size sort
 - `t`, `1..9`, `[` / `]`: tab create, numbered tab switch, previous/next tab
 
-- 独自差分: 明示的に変更しているのは `keymap.toml`、`[mgr].ratio`、`[opener].play`、`plugins/smart-enter.yazi/main.lua` です。`keymap.toml` では `q` / `Q` / `<Esc>` を `quit` にそろえ、`../zsh/function.zsh` の `--cwd-file` 連携を壊さないことを優先しています。
+- 独自差分: 明示的に変更しているのは `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].rules`、`plugins/smart-enter.yazi/main.lua` です。`keymap.toml` では `q` / `Q` / `<Esc>` を `quit` にそろえ、`../zsh/function.zsh` の `--cwd-file` 連携を壊さないことを優先しています。
 
 font size のような表示系を変更したくなった場合は、まず `yazi` ではなく使用中のターミナルエミュレータ側設定を見ます。そのうえで Yazi 側にも設定を追加したら、この節と `yazi.toml` のメモを同時に更新します。
 
