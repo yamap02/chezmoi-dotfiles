@@ -168,6 +168,21 @@ class YaziKeymapMigrationTest(unittest.TestCase):
             config["opener"]["play"],
         )
 
+    def test_html_opener_uses_default_browser_on_macos(self):
+        config = load_yazi_config()
+        self.assertIn(
+            {
+                "run": "open %s",
+                "desc": "Browser",
+                "for": "macos",
+            },
+            config["opener"]["browser"],
+        )
+        self.assertEqual(
+            config["open"]["rules"],
+            [{"mime": "text/html", "use": "browser"}],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
