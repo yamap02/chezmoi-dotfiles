@@ -17,7 +17,7 @@ browser = [{ run = "open %s", desc = "Browser", for = "macos" }]
 
 [open]
 # HTML を Yazi のテキスト preview ではなくブラウザーへ渡す。
-rules = [{ mime = "text/html", use = "browser" }]
+prepend_rules = [{ mime = "text/html", use = "browser" }]
 
 [preview]
 # 画像 preview のキャッシュ生成量を抑える。
