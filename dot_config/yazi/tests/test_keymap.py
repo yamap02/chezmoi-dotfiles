@@ -179,7 +179,7 @@ class YaziKeymapMigrationTest(unittest.TestCase):
             config["opener"]["browser"],
         )
         self.assertEqual(
-            config["open"]["rules"],
+            config["open"]["prepend_rules"],
             [{"mime": "text/html", "use": "browser"}],
         )
 

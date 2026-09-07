@@ -39,7 +39,7 @@
 - `mgr.ratio = [1, 3, 4]`
 - `preview.wrap = "yes"`（長い行をプレビュー欄の幅で折り返す）
 - `[opener].play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]`
-- `[open].rules` の `text/html` は `browser` opener（macOS の `open %s`）へ渡す
+- `[open].prepend_rules` の `text/html` は `browser` opener（macOS の `open %s`）へ渡す。既定のNeovim用ルールは保持する
 
 それ以外で既定値のまま使っている代表項目:
 
@@ -76,7 +76,7 @@ HTML open は macOS の `open %s` に渡すため、システムで設定され�
 - `,a` `,n` `,m` `,s`: alphabetical / natural / mtime / size sort
 - `t`, `1..9`, `[` / `]`: tab create, numbered tab switch, previous/next tab
 
-- 独自差分: 明示的に変更しているのは `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].rules`、`plugins/smart-enter.yazi/main.lua` です。`keymap.toml` では `q` / `Q` / `<Esc>` を `quit` にそろえ、`../zsh/function.zsh` の `--cwd-file` 連携を壊さないことを優先しています。
+- 独自差分: 明示的に変更しているのは `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].prepend_rules`、`plugins/smart-enter.yazi/main.lua` です。`prepend_rules` でHTMLだけを追加し、既定のファイル用openerを保持します。`keymap.toml` では `q` / `Q` / `<Esc>` を `quit` にそろえ、`../zsh/function.zsh` の `--cwd-file` 連携を壊さないことを優先しています。
 
 font size のような表示系を変更したくなった場合は、まず `yazi` ではなく使用中のターミナルエミュレータ側設定を見ます。そのうえで Yazi 側にも設定を追加したら、この節と `yazi.toml` のメモを同時に更新します。
 
