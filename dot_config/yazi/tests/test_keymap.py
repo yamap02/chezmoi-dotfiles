@@ -48,6 +48,11 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         self.assertEqual(keymap[("J",)], "arrow 50%")
         self.assertEqual(keymap[("K",)], "arrow -50%")
 
+    def test_smart_enter_opens_files_and_enters_directories(self):
+        text = SMART_ENTER_PATH.read_text(encoding="utf-8")
+        self.assertIn('hovered.cha.is_dir and "enter" or "open"', text)
+        self.assertIn('{ hovered = true }', text)
+
     def test_quit_keymap_keeps_cwd_file_integration_enabled(self):
         keymap = load_keymap()
         for key in (("q",), ("Q",), ("<Esc>",)):
