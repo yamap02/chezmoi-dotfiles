@@ -2,6 +2,19 @@
 # Functions
 # 参考: https://github.com/yutkat/dotfiles/blob/master/.config/zsh/rc/function.zsh
 #======================================================================================
+
+function cdf() {
+  local repo dir
+  repo="$(ghq list -p | fzf --prompt='repo> ')" || return
+  dir="$(fd --type d --hidden --exclude .git . "$repo" | fzf --prompt='dir> ')" || return
+  cd -- "$dir"
+}
+
+function fbr() {
+  local branch
+  branch="$(git branch -vv | fzf +m)" || return
+  git switch "$(awk '{print $1}' <<< "$branch")"
+}
 # function select-history() {
 #   BUFFER=$(history -n -r 10 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
 #   CURSOR=$#BUFFER

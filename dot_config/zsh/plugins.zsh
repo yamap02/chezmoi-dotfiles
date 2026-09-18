@@ -24,9 +24,7 @@ zinit light zsh-users/zsh-autosuggestions
 # zinit ice wait'!3' lucid atload"bindkey '^x^b' anyframe-widget-checkout-git-branch"
 
 zinit wait'!1' atinit'zpcompinit' lucid light-mode for \
-  zsh-users/zsh-completions \
-  zsh-users/zsh-history-substring-search
-  # agkozak/zsh-z \
+  zsh-users/zsh-completions
 
 zinit wait'!3' lucid light-mode for \
   mollifier/cd-gitroot \
@@ -35,7 +33,3 @@ zinit wait'!3' lucid light-mode for \
   MichaelAquilina/zsh-auto-notify \
   joshskidmore/zsh-fzf-history-search \
   zsh-users/zsh-history-substring-search
-
-  # hlissner/zsh-autopair
-  # xav-b/zsh-extend-history
-  # zthxxx/zsh-history-enquirer

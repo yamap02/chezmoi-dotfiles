@@ -25,3 +25,10 @@ bindkey "^[[4~" end-of-line # End
 
 # "^S" history-incremental-search-forward
 bindkey -r "^S"
+
+if (( $+widgets[history-substring-search-up] )); then
+  [[ -n "$terminfo[kcuu1]" ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
+  [[ -n "$terminfo[kcud1]" ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
+  bindkey -M emacs '^P' history-substring-search-up
+  bindkey -M emacs '^N' history-substring-search-down
+fi
