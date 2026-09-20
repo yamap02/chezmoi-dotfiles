@@ -26,10 +26,11 @@ palette = 15=#ffffff
 
 # フォント（日本語フォールバック追加）
 # font-family = JetBrainsMono Nerd
-# font-family = UDEVGothicNF
-font-family = UDEVGothic
-
-# font-family = "Hiragino Kaku Gothic ProN"
+# `UDEVGothic` はインストール済みフォント名として解決されず、
+# Verdana にフォールバックして日本語が文字化けするため、NF 版を使う。
+font-family = UDEVGothicNF
+# UDEV Gothic NF にない文字は macOS 標準の日本語フォントへフォールバックする。
+font-family = "Hiragino Sans"
 font-size = 16
 font-feature = -dlig
 
