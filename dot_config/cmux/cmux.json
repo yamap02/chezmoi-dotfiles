@@ -24,14 +24,14 @@
   },
 
   "sidebar": {
-    "hideAllDetails": false,
+    "hideAllDetails": true,
     "showBranchDirectory": true,
     "showCustomMetadata": false,
-    "showLog": true,
-    "showNotificationMessage": true,
-    "showPorts": true,
-    "showProgress": true,
-    "showPullRequests": true,
+    "showLog": false,
+    "showNotificationMessage": false,
+    "showPorts": false,
+    "showProgress": false,
+    "showPullRequests": false,
     "showSSH": false
   },
 

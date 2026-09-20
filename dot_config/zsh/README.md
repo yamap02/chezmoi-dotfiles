@@ -29,3 +29,13 @@ command git clone https://github.com/zdharma-continuum/zinit.git "$HOME/.zinit/b
 ```
 
 zinit がなければ警告を stderr に表示し、残りのシェル設定は読み込みます。
+
+## 補完キャッシュ
+
+起動時は `zcompdump` を再利用して、補完定義の安全性チェックを省略します。
+補完関数を追加・更新した場合は、次回起動前にキャッシュを削除して再生成します。
+
+```sh
+rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+exec zsh
+```

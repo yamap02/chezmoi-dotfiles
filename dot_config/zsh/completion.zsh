@@ -9,7 +9,9 @@
 autoload -Uz compinit
 typeset -g ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 command mkdir -p "${ZSH_COMPDUMP:h}"
-compinit -d "$ZSH_COMPDUMP"
+# zcompdump が存在する場合は安全性チェックを省略し、起動時の補完初期化を短縮する。
+# 補完定義を追加・更新したときは README の再生成手順でダンプを作り直す。
+compinit -C -d "$ZSH_COMPDUMP"
 
 # オプション補完で解説部分を表示
 zstyle ':completion:*' verbose true
