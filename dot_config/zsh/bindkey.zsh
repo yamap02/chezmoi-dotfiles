@@ -29,6 +29,8 @@ bindkey -r "^S"
 if (( $+widgets[history-substring-search-up] )); then
   [[ -n "$terminfo[kcuu1]" ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
   [[ -n "$terminfo[kcud1]" ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
-  bindkey -M emacs '^p' history-substring-search-up
   bindkey -M emacs '^N' history-substring-search-down
 fi
+
+# Cmd-P (Ghostty が Ctrl-P として送信): 入力先頭に一致する履歴を遡る
+bindkey -M emacs '^p' history-beginning-search-backward
