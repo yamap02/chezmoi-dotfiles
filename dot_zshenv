@@ -12,7 +12,7 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
   infopath=(/opt/homebrew/share/info $infopath)
 fi
 
-path=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin" "$HOME/.rye/shims" "$HOME/.deno/bin" "$HOME/.go/bin" "$HOME/.volta/bin" "$HOME/.pyenv/bin" "$HOME/.nimble/bin"(N-/) "$HOME/.rbenv/shims"(N-/) /usr/local/go/bin /usr/local/bin /usr/bin /bin /usr/sbin /sbin $path)
+path=("$HOME/bin"(N-/) "$HOME/.local/bin"(N-/) "$HOME/.cargo/bin"(N-/) "$HOME/.rye/shims"(N-/) "$HOME/.deno/bin"(N-/) "$HOME/.go/bin"(N-/) "$HOME/.volta/bin"(N-/) "$HOME/.pyenv/bin"(N-/) "$HOME/.nimble/bin"(N-/) "$HOME/.rbenv/shims"(N-/) /usr/local/go/bin(N-/) /usr/local/bin(N-/) /usr/bin(N-/) /bin(N-/) /usr/sbin(N-/) /sbin(N-/) $path)
 fpath=("$HOME/.config/zsh/zfunc"(N-/) "$HOME/.config/zsh/completion"(N-/) /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions $fpath)
 
 export LESS_TERMCAP_mb=$'\e[1;31m'

@@ -5,6 +5,12 @@
 
 # :completion:function:completer:command:argument:tag
 
+# zinit の遅延ロードには依存せず、補完の初期化をこの設定で明示する。
+autoload -Uz compinit
+typeset -g ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+command mkdir -p "${ZSH_COMPDUMP:h}"
+compinit -d "$ZSH_COMPDUMP"
+
 # オプション補完で解説部分を表示
 zstyle ':completion:*' verbose true
 # 補完方法の設定。指定した順番に実行する。

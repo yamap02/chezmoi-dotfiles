@@ -19,7 +19,7 @@ zinit light zsh-users/zsh-autosuggestions
 # Ctrl+x -> Ctrl+b で Git ブランチを表示してインタラクティブに絞り込みして切り替え
 # zinit ice wait'!3' lucid atload"bindkey '^x^b' anyframe-widget-checkout-git-branch"
 
-zinit wait'!1' atinit'zpcompinit' lucid light-mode for \
+zinit wait'!1' lucid light-mode for \
   zsh-users/zsh-completions
 
 zinit wait'!3' lucid light-mode for \

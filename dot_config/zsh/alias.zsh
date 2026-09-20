@@ -2,7 +2,14 @@ alias mkdir="mkdir -p"
 alias quit='exit'
 # alias rezsh='exec zsh'
 
-if builtin command -v exa > /dev/null 2>&1; then
+if builtin command -v eza > /dev/null 2>&1; then
+  alias e='eza --icons'
+  alias ea='eza -a --icons'
+  alias el='eza -l --icons'
+  alias ela='eza -aal --icons'
+  alias et='eza -T -L 3 --icons -I "node_modules|.git|.cache|.venv|__pycache__"'
+  alias eta='eza -a -T -L 3 --icons -I "node_modules|.git|.cache|.venv|__pycache__"'
+elif builtin command -v exa > /dev/null 2>&1; then
   alias e='exa --icons'
   alias ea='exa -a --icons'
   alias el='exa -l --icons'
@@ -43,8 +50,8 @@ alias mkd='mkdir'
 alias n='nvim'
 # alias n='~/nvim.appimage'
 alias p='python'
-alias make='colormake'
-alias un='unar'
+command -v colormake >/dev/null 2>&1 && alias make='colormake'
+command -v unar >/dev/null 2>&1 && alias un='unar'
 ##tmux
 # alias t='tmux'
 # alias ta='tmux a'
@@ -54,17 +61,17 @@ alias un='unar'
 # alias tmux-copy='tmux save-buffer - | pbcopy'
 alias unzipS='unzip -Ocp932'  ###shift>utf-8
 # alias pa="pipenv shell"
-alias pa="poetry shell"
+command -v poetry >/dev/null 2>&1 && alias pa="poetry shell"
 alias bash="bash --norc"
 alias yayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy="yes | yay -Syu --overwrite \"/usr/lib/node_modules/npm/node_modules/*\" ; paccache -r; paccache -ruk0"
 # alias yayy="yes | yay -Syu ; paccache -r; paccache -ruk0"
 # alias ls="exa"
 # alias tree="exa"
-alias cat="bat"
-alias wc="tokei"
+command -v bat >/dev/null 2>&1 && alias cat="bat"
+command -v tokei >/dev/null 2>&1 && alias wc="tokei"
 
-alias up-d="docker-compose up -d"
-alias down="docker-compose down"
+command -v docker-compose >/dev/null 2>&1 && alias up-d="docker-compose up -d"
+command -v docker-compose >/dev/null 2>&1 && alias down="docker-compose down"
 # alias diff="colordiff"
 
 
@@ -78,7 +85,7 @@ alias gs='git switch'
 # alias less='less -RS --use-color'
 alias grep='grep --color=always'
 alias fa='sudo pacman-mirrors --fasttrack && sudo pacman -Syy'
-alias rm='rmtrash'
+command -v rmtrash >/dev/null 2>&1 && alias rm='rmtrash'
 # alias rmdir='rmdirtrash'
 
 # chmod
