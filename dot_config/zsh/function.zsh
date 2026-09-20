@@ -148,11 +148,11 @@ function ranger-cd {
 }
 
 function yazi() {
-  local cwd_file
-  local new_cwd
+  local cwd_file new_cwd exit_status
 
   cwd_file="$(mktemp -t yazi-cwd.XXXXXX)"
   command yazi --cwd-file "$cwd_file" "${@:-$(pwd)}"
+  exit_status=$?
 
   if [[ -f "$cwd_file" ]]; then
     new_cwd="$(cat -- "$cwd_file")"
@@ -162,6 +162,7 @@ function yazi() {
   fi
 
   command rm -f -- "$cwd_file"
+  return "$exit_status"
 }
 
 # random string (default length: 6)

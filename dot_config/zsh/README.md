@@ -13,3 +13,19 @@
 ```sh
 zsh /Users/user/.config/zsh/tests/test_yazi_wrapper.zsh
 ```
+
+## 起動構成
+
+`dot_zshrc` はこのディレクトリを固定順で読み込みます。設定ファイルが
+見つからない場合は、起動を続けずエラーを stderr に表示します。
+
+## zinit
+
+シェル起動時に zinit を clone しません。必要な場合は一度だけインストールします。
+
+```sh
+command mkdir -p "$HOME/.zinit"
+command git clone https://github.com/zdharma-continuum/zinit.git "$HOME/.zinit/bin"
+```
+
+zinit がなければ警告を stderr に表示し、残りのシェル設定は読み込みます。

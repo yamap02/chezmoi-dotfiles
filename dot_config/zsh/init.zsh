@@ -1,9 +1,10 @@
 typeset -g ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
-source "$ZDOTDIR/environment.zsh"
-source "$ZDOTDIR/base.zsh"
-source "$ZDOTDIR/completion.zsh"
-source "$ZDOTDIR/function.zsh"
-source "$ZDOTDIR/alias.zsh"
-source "$ZDOTDIR/bindkey.zsh"
-source "$ZDOTDIR/plugins.zsh"
-source "$ZDOTDIR/external_tool_init.zsh"
+
+for zsh_config in environment base completion function alias bindkey plugins external_tool_init; do
+  typeset zsh_config_path="$ZDOTDIR/$zsh_config.zsh"
+  [[ -r "$zsh_config_path" ]] || {
+    print -u2 "zsh: missing config: $zsh_config_path"
+    return 1
+  }
+  source "$zsh_config_path"
+done
