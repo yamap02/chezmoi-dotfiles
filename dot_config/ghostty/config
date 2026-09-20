@@ -55,6 +55,9 @@ cursor-style-blink = false
 # (デフォルトの xterm-ghostty は Kitty キーボードプロトコルを使い ranger がフリーズする)
 term = xterm-256color
 macos-option-as-alt = true
+
+# Cmd+P: 入力済みの文字列に一致する過去のコマンドを遡る
+keybind = cmd+p=text:\x10
 copy-on-select = clipboard
 mouse-hide-while-typing = true
 
