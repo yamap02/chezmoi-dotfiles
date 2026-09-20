@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  "app": {
+    "commandPaletteSearchesAllSurfaces": false,
+    "focusPaneOnFirstClick": true,
+    "keepWorkspaceOpenWhenClosingLastSurface": true,
+    "minimalMode": true,
+    "reorderOnNotification": false,
+    "sendAnonymousTelemetry": false,
+    "warnBeforeQuit": true
+  },
+
+  "terminal": {
+    "autoResumeAgentSessions": false
+  },
+
+  "notifications": {
+    "dockBadge": false,
+    "paneFlash": false,
+    "showInMenuBar": true,
+    "unreadPaneRing": true
+  },
+
+  "sidebar": {
+    "hideAllDetails": false,
+    "showBranchDirectory": true,
+    "showCustomMetadata": false,
+    "showLog": true,
+    "showNotificationMessage": true,
+    "showPorts": true,
+    "showProgress": true,
+    "showPullRequests": true,
+    "showSSH": false
+  },
+
+  "browser": {
+    "interceptTerminalOpenCommandInCmuxBrowser": false,
+    "openTerminalLinksInCmuxBrowser": false,
+    "showImportHintOnBlankTabs": false,
+    "showSearchSuggestions": false,
+    "theme": "system"
+  },
+
+  "shortcuts": {
+    "bindings": {
+      "focusLeft": "cmd+opt+←",
+      "focusRight": "cmd+opt+→",
+      "focusUp": "cmd+opt+↑",
+      "focusDown": "cmd+opt+↓",
+      "nextSurface": "cmd+k",
+      "prevSurface": "cmd+j",
+      "goToWorkspace": "cmd+opt+p",
+      "selectWorkspaceByNumber": "cmd+1",
+      "nextSidebarTab": "cmd+ctrl+]",
+      "prevSidebarTab": "cmd+ctrl+["
+    },
+    "showModifierHoldHints": false
+  }
+}
