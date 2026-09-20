@@ -40,6 +40,9 @@
   },
 
   "shortcuts": {
+    "bindings": {
+      "goToWorkspace": "cmd+opt+p"
+    },
     "showModifierHoldHints": false
   }
 
