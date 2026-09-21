@@ -1,5 +1,24 @@
 return {
     {
+        "NvChad/nvim-colorizer.lua",
+        ft = { "markdown", "md" },
+        opts = {
+            filetypes = { "markdown", "md" },
+            user_default_options = {
+                mode = "background",
+                tailwind = true,
+                css = true,
+                css_fn = true,
+                names = false,
+                RGB = true,
+                RRGGBB = true,
+                RRGGBBAA = true,
+                AARRGGBB = true,
+                always_update = false,
+            },
+        },
+    },
+    {
         "iamcco/markdown-preview.nvim",
         ft = { "markdown", "md" },
         build = "cd app && npm install",
