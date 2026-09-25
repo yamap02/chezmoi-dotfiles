@@ -1,6 +1,4 @@
-## 言語
-
-* 回答・作業記述 日本語
+Use `rg` instead of `grep`.
 
 ## TODO
 gitではなくgtrを用いる
