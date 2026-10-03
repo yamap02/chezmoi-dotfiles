@@ -1,21 +1,15 @@
 personality = "pragmatic"
-model = "gpt-6-luna"
-model_reasoning_effort = "low"
+model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
 approvals_reviewer = "user"
-# default_permissions = "safe-dev"
-default_permissions = ":danger-full-access"
+default_permissions = "safe-dev"
+approval_policy = "on-request"
+developer_instructions = "秘密情報の読み取りを目的とする権限昇格を要求せず、safe-dev の秘密情報禁止ルールを回避しない。必要な設定項目は値を含まないサンプルやユーザー提供のマスク済み情報から確認する。"
 notify = [
     "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
     "turn-ended",
 ]
-service_tier = "priority"
-
-[approval_policy.granular]
-sandbox_approval = true
-rules = true
-mcp_elicitations = true
-request_permissions = true
-skill_approval = true
+service_tier = "default"
 
 [auto_review]
 policy = """
@@ -39,39 +33,68 @@ developer_instructions = """
 * ネットワーク利用は最小限に抑え、可能な限り localhost を優先する。外部ネットワークアクセスが必要な場合は、事前に確認を求め、ユーザーが指定した具体的な許可対象ドメインのみに範囲を限定する。
   """
 
+# Local commands may access workspace roots and the runtime paths below.
+# Secret denials apply even when ~/.codex itself is a workspace root.
+[permissions.safe-dev]
+extends = ":workspace"
+description = "Workspace editing with secret files denied; network requires approval."
+
 [permissions.safe-dev.filesystem]
-glob_scan_max_depth = 8
-"/Users/user/.codex" = "write"
-"/Users/user/.docker/buildx" = "write"
-"/Users/user/.cache" = "write"
-"/Users/user/Documents/**" = "deny"
-"/Users/user/Downloads/**" = "deny"
-"/Users/user/Library/**" = "deny"
-"~/.ssh/**" = "deny"
-"~/.aws/**" = "deny"
-"~/.gnupg/**" = "deny"
+":root" = "deny"
+":minimal" = "read"
+"/System/Library/OpenSSL" = "read"
+":tmpdir" = "write"
+":slash_tmp" = "write"
+"~/.local/bin" = "read"
+"~/.local/share/uv/python" = "read"
+"~/.hermes/node" = "read"
+"~/.cache/codex-runtimes" = "read"
+"~/.cache/uv" = "write"
+"~/.npm/_cacache" = "write"
+"~/.npm/_logs" = "write"
+"~/.docker/buildx" = "write"
+"~/.ssh" = "deny"
+"~/.aws" = "deny"
+"~/.gnupg" = "deny"
 "~/.npmrc" = "deny"
 "~/.netrc" = "deny"
 "~/.pypirc" = "deny"
 "~/.docker/config.json" = "deny"
+"~/.codex/auth.json" = "deny"
+"~/.codex/auth.json.*" = "deny"
 
-[permissions.safe-dev.filesystem.":project_roots"]
+[permissions.safe-dev.filesystem.":workspace_roots"]
 "." = "write"
-"node_modules/**" = "deny"
-".env" = "deny"
-".npmrc" = "deny"
-".netrc" = "deny"
-".pypirc" = "deny"
-".docker/config.json" = "deny"
-".ssh/**" = "deny"
-".aws/**" = "deny"
-".gnupg/**" = "deny"
-"credentials" = "deny"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/*.env" = "deny"
+"**/*.pem" = "deny"
+"**/*.key" = "deny"
+"**/*.p12" = "deny"
+"**/*.pfx" = "deny"
+"**/id_rsa*" = "deny"
+"**/id_ed25519*" = "deny"
+"**/id_ecdsa*" = "deny"
+"**/id_dsa*" = "deny"
+"**/.npmrc" = "deny"
+"**/.netrc" = "deny"
+"**/.pypirc" = "deny"
+"**/.docker/config.json" = "deny"
+"**/.ssh" = "deny"
+"**/.ssh/**" = "deny"
+"**/.aws" = "deny"
+"**/.aws/**" = "deny"
+"**/.gnupg" = "deny"
+"**/.gnupg/**" = "deny"
+"**/credentials" = "deny"
+"**/credentials/**" = "deny"
+"**/.codex/auth.json" = "deny"
+"**/.codex/auth.json.*" = "deny"
 
 [permissions.safe-dev.network]
 enabled = false
 mode = "limited"
-allow_local_binding = true
+allow_local_binding = false
 
 [marketplaces.openai-bundled]
 source_type = "local"
@@ -84,26 +107,19 @@ source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai
 [features]
 memories = true
 goals = true
+prevent_idle_sleep = true
+fast_mode = false
 
 [tui]
-status_line = [
-    "current-dir",
-    "model",
-    "project-name",
-    "git-branch",
-    "pull-request-number",
-    "branch-changes",
-    "run-state",
-    "context-remaining",
-    "context-used",
-    "five-hour-limit",
-    "weekly-limit",
-    "context-window-size",
-    "used-tokens",
-    "total-input-tokens",
-    "total-output-tokens",
-]
+status_line = ["current-dir", "model", "project-name", "pull-request-number", "branch-changes", "context-used", "five-hour-limit", "used-tokens", "total-input-tokens", "total-output-tokens"]
 status_line_use_colors = true
+screen_reader_detection_done = true
+theme = "monokai-extended-origin"
+fullscreen_transcript = true
+
+[tui.model_availability_nux]
+gpt-6-astra = 4
+"gpt-6.1-sol" = 4
 
 [desktop]
 appearanceTheme = "light"
@@ -119,6 +135,9 @@ realtimeVoiceScreenContextEnabled = true
 appshotSoundEnabled = false
 external-agent-import-sync-enabled = true
 worktree-upstream-refresh-mode = "best-effort"
+default-workspace-full-view = true
+show-context-window-usage = true
+toys-audio-visualizer-enabled = true
 
 [desktop.appearanceLightChromeTheme]
 accent = "#339cff"
@@ -148,16 +167,16 @@ NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_n
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/user/.codex"
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
 BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.930.21537"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.930.21537/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
-CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
 [mcp_servers.computer-use]
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
@@ -206,11 +225,11 @@ trust_level = "trusted"
 [projects."/Users/user/.local/share/chezmoi"]
 trust_level = "trusted"
 
+[projects."/Users/user/ai-dev/app-docs"]
+trust_level = "trusted"
+
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
-
-[plugins."sites@openai-bundled"]
-enabled = false
 
 [plugins."browser@openai-bundled"]
 enabled = true
@@ -242,40 +261,19 @@ enabled = true
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
+[plugins."code-review@openai-bundled"]
+enabled = true
+
 [hooks.state]
-
-[hooks.state."/Users/user/.codex/hooks.json:pre_tool_use:0:0"]
-trusted_hash = "sha256:808ede718b92935e46a59dfe8b801679944a6dcf722b6ed7d4d2423678719848"
-
-[hooks.state."/Users/user/.codex/hooks.json:permission_request:0:0"]
-trusted_hash = "sha256:a6986aeec7af46a1b7e8ec91f0525db1706eab560b8eb87d34137af772211960"
-
-[hooks.state."/Users/user/.codex/hooks.json:post_tool_use:0:0"]
-trusted_hash = "sha256:8e7582fce93eb0a433c4232fc3b9cfb07d28ff82704645d30d82bcdee2da9d1b"
 
 [hooks.state."/Users/user/.codex/hooks.json:session_start:0:0"]
 trusted_hash = "sha256:84a42fdc3740fdc06c3b59dd663999a437c877af25038f30f32bdccfea018978"
 
-[hooks.state."/Users/user/.codex/hooks.json:session_start:1:0"]
-trusted_hash = "sha256:1baf94820a9d501e2f57eb95b76210c6be93668a346edac01abcc4b8c2c2ee21"
-
 [hooks.state."/Users/user/.codex/hooks.json:user_prompt_submit:0:0"]
 trusted_hash = "sha256:536034a3106960d0391f8ed5ee43493be731207368ff3ec03c15bb72e7adbc95"
 
-[hooks.state."/Users/user/.codex/hooks.json:user_prompt_submit:1:0"]
-trusted_hash = "sha256:f1718dd557898842220d34bda474ac5f3f66752b8ff4c585982a6938794a10a8"
-
-[hooks.state."/Users/user/.codex/hooks.json:subagent_start:0:0"]
-trusted_hash = "sha256:4423df71461f7b73169427219ac50da2f0b99f47b473e21031926a4758ae430e"
-
-[hooks.state."/Users/user/.codex/hooks.json:subagent_stop:0:0"]
-trusted_hash = "sha256:e8c8ff207ea9f9453c16c7bf3abad38d4f8a9eb25fda3edc7f6e147478037327"
-
 [hooks.state."/Users/user/.codex/hooks.json:stop:0:0"]
 trusted_hash = "sha256:320ee23deed6c947e178cc56ec2305023e05be6ea8008cb5bb9b670c6a8a0967"
-
-[hooks.state."/Users/user/.codex/hooks.json:stop:1:0"]
-trusted_hash = "sha256:7a298044e92433e1bf7e32520b53cec7bcd317aacde799000e145b1a3e84bbcb"
 
 [hooks.state."/Users/user/ai-dev/pm-skill/.codex/hooks.json:pre_compact:0:0"]
 trusted_hash = "sha256:1f647821c1b2d16b397ca09bb1c76c71f74b04e8e13abf4abcd044a1ae82e0f7"
@@ -288,3 +286,33 @@ trusted_hash = "sha256:392a61a090ba7d6aab6ab0fb0f82f3df3d6a380ee81f60f00af3bd420
 
 [hooks.state."/Users/user/ai-dev/pm-skill/.codex/hooks.json:user_prompt_submit:0:0"]
 trusted_hash = "sha256:61bc468420addc4d83d288a4311e1409cc89cbbd9f44fec2e1039512d20fab86"
+
+[hooks.state."/Users/user/.codex/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:33153c88ce09e9a5b899b9cb33dd23382be394a3e1cdb421e44e0b3778e8bdf2"
+
+[hooks.state."/Users/user/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:bd2c29369e47a438a3f2c1c18896d7bd86ce58c0eb5542f1c3b879e427f92fc9"
+
+[hooks.state."/Users/user/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:a452131ceaecacb08404d1a8d49d85315fdf109905d152859c32b538c9002f93"
+
+[hooks.state."/Users/user/.codex/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:d853ef9fbaf2ff5c8504bf2463675664aaf29a8016c6a35293a6ddc053b4f030"
+
+[hooks.state."/Users/user/.codex/hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:5383e8af0fe09d96df4e6d0f5f3edaec15485d6162a1a749b5c69e7242eb0478"
+
+[hooks.state."/Users/user/.codex/hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:269737162a0cf2b29b3e40df23411c02a8bbdeb5f471243c924dac116624cdcf"
+
+[hooks.state."/Users/user/.codex/hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:62ff9ef7fcca3784011e955f35ee3612b11168b2f62bd772f08adefb918d34be"
+
+[hooks.state."/Users/user/.codex/hooks.json:stop:1:0"]
+trusted_hash = "sha256:1ae8ee19d95298f7bc4821368a7d4600b9f9d36c68695812c19419b28b5ad53e"
+
+[projects."/Users/user/orca/workspaces/pm-skill4/noddy"]
+trust_level = "trusted"
+
+[projects."/Users/user/ai-dev/chrome-extention-base"]
+trust_level = "trusted"
