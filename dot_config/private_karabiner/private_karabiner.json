@@ -1,8 +1,5 @@
 {
-    "global": {
-        "ask_for_confirmation_before_quitting": false,
-        "show_in_menu_bar": false
-    },
+    "global": { "show_in_menu_bar": false },
     "profiles": [
         {
             "complex_modifications": {
@@ -83,6 +80,62 @@
                     }
                 ]
             },
+            "devices": [
+                {
+                    "identifiers": { "is_keyboard": true },
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "delete_or_backspace" },
+                            "to": [{ "key_code": "vk_none" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_eisuu" },
+                            "to": [{ "key_code": "escape" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_kana" },
+                            "to": [{ "key_code": "return_or_enter" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_pc_katakana" },
+                            "to": [{ "key_code": "delete_or_backspace" }]
+                        }
+                    ]
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 45929,
+                        "vendor_id": 1133
+                    },
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "delete_or_backspace" },
+                            "to": [{ "key_code": "vk_none" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_eisuu" },
+                            "to": [{ "key_code": "escape" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_kana" },
+                            "to": [{ "key_code": "return_or_enter" }]
+                        },
+                        {
+                            "from": { "key_code": "japanese_pc_katakana" },
+                            "to": [{ "key_code": "delete_or_backspace" }]
+                        },
+                        {
+                            "from": { "key_code": "left_control" },
+                            "to": [{ "key_code": "left_command" }]
+                        },
+                        {
+                            "from": { "key_code": "return_or_enter" },
+                            "to": [{ "key_code": "vk_none" }]
+                        }
+                    ]
+                }
+            ],
             "fn_function_keys": [
                 {
                     "from": { "key_code": "f3" },
@@ -91,32 +144,6 @@
             ],
             "name": "Default profile",
             "selected": true,
-            "simple_modifications": [
-                {
-                    "from": { "key_code": "delete_or_backspace" },
-                    "to": [{ "key_code": "vk_none" }]
-                },
-                {
-                    "from": { "key_code": "japanese_eisuu" },
-                    "to": [{ "key_code": "escape" }]
-                },
-                {
-                    "from": { "key_code": "japanese_kana" },
-                    "to": [{ "key_code": "return_or_enter" }]
-                },
-                {
-                    "from": { "key_code": "japanese_pc_katakana" },
-                    "to": [{ "key_code": "delete_or_backspace" }]
-                },
-                {
-                    "from": { "key_code": "left_control" },
-                    "to": [{ "key_code": "left_command" }]
-                },
-                {
-                    "from": { "key_code": "return_or_enter" },
-                    "to": [{ "key_code": "vk_none" }]
-                }
-            ],
             "virtual_hid_keyboard": { "keyboard_type_v2": "jis" }
         }
     ]
