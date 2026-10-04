@@ -10,27 +10,19 @@ local function line_count(path)
 end
 
 function M:peek(job)
-	local count, err = line_count(tostring(job.file.path))
-	if not count then
-		ya.preview_widget(job, ui.Text(string.format("Unable to count lines: %s", err or "unknown error")):
+	local path = tostring(job.file.path)
+	local count, count_err = line_count(path)
+	local output, content_err = Command("cat"):arg(path):output()
+	if not output then
+		ya.preview_widget(job, ui.Text(string.format("Unable to preview file: %s", content_err or "unknown error")):
 			area(job.area))
 		return
 	end
 
-	-- Keep the same preview arguments as Yazi's built-in code previewer.
-	-- Draw the line-count label afterwards so it overlays the first row.
-	local err = ya.preview_code(job)
-	if err and not err:find("cancelled", 1, true) then
-		ya.dbg("line-count preview failed", err)
-	end
-
-	local header_area = ui.Rect {
-		x = job.area.x,
-		y = job.area.y,
-		w = job.area.w,
-		h = math.min(1, job.area.h),
-	}
-	ya.preview_widget(job, ui.Text(string.format("Lines: %s", count)):area(header_area))
+	local header = count and string.format("Lines: %s\n\n", count)
+		or string.format("Lines: unavailable (%s)\n\n", count_err or "unknown error")
+	local text = ui.Text.parse(header .. output.stdout)
+	ya.preview_widget(job, text:area(job.area):wrap(ui.Wrap.YES))
 end
 
 function M:seek(job)

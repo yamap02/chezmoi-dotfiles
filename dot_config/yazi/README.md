@@ -7,7 +7,7 @@
 - `yazi.toml`: キーマップ以外の既定値メモと、意図的に変えている一般設定を置いています。今はプレビュー幅の調整、長い行の折り返し、macOS の media opener を `IINA` に固定する差分、HTML を既定ブラウザーで開く差分を入れています。
 - `keymap.toml`: `ranger` の主要キーマップ移植先です。`q` / `Q` / `<Esc>` は `zsh` wrapper の `cwd` 同期を壊さないよう `quit` のまま上書きし、`dD` は確認なしで処理するようにしています。
 - `plugins/smart-enter.yazi/main.lua`: `ranger` の `l` / `Enter` に近づけるため、ディレクトリなら入る・ファイルなら開く `smart-enter` をローカル実装しています。
-- `plugins/line-count.yazi/main.lua`: テキストファイルのプレビュー先頭に `Lines: ...` を表示し、その下に通常のコードプレビューを表示します。
+- `plugins/line-count.yazi/main.lua`: テキストファイルのプレビュー先頭に `Lines: ...` を表示し、その下にファイル内容を表示します。
 - `tests/test_keymap.py`: 主要キーマップが壊れていないかを確認する回帰テストです。
 - `../zsh/function.zsh`: `yazi` 終了後にターミナル側も移動先ディレクトリへ追従させる shell wrapper です。`--cwd-file` を読む前提なので、終了キーで `--no-cwd-file` を使わないこともこのディレクトリの契約です。
 
