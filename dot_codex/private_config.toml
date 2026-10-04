@@ -62,6 +62,8 @@ description = "Workspace editing with secret files denied; network requires appr
 "~/.docker/config.json" = "deny"
 "~/.codex/auth.json" = "deny"
 "~/.codex/auth.json.*" = "deny"
+"~/.gitconfig" = "read"
+"~/.config/git" = "read"
 
 [permissions.safe-dev.filesystem.":workspace_roots"]
 "." = "write"
@@ -90,6 +92,7 @@ description = "Workspace editing with secret files denied; network requires appr
 "**/credentials/**" = "deny"
 "**/.codex/auth.json" = "deny"
 "**/.codex/auth.json.*" = "deny"
+".git" = "write"
 
 [permissions.safe-dev.network]
 enabled = false
