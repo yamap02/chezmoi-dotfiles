@@ -2,9 +2,11 @@
 bindkey -e
 
 function ghq-fzf() {
-  local src="$(ghq list | fzf)"
+  local src root
+  src="$(ghq list | fzf)" || return
   if [ -n "$src" ]; then
-    BUFFER="cd $(ghq root)/$src"
+    root="$(ghq root)" || return
+    BUFFER="cd -- ${(q)root}/${(q)src}"
     zle accept-line
   fi
   zle -R -c
@@ -26,11 +28,13 @@ bindkey "^[[4~" end-of-line # End
 # "^S" history-incremental-search-forward
 bindkey -r "^S"
 
-if (( $+widgets[history-substring-search-up] )); then
-  [[ -n "$terminfo[kcuu1]" ]] && bindkey "$terminfo[kcuu1]" history-substring-search-up
-  [[ -n "$terminfo[kcud1]" ]] && bindkey "$terminfo[kcud1]" history-substring-search-down
+function _bind_history_substring_search() {
+  (( $+widgets[history-substring-search-up] )) || return 0
+  [[ -n "$terminfo[kcuu1]" ]] && bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
+  [[ -n "$terminfo[kcud1]" ]] && bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
   bindkey -M emacs '^N' history-substring-search-down
-fi
+}
+_bind_history_substring_search
 
 # Cmd-P (Ghostty が Ctrl-P として送信): 入力先頭に一致する履歴を遡る
 bindkey -M emacs '^p' history-beginning-search-backward

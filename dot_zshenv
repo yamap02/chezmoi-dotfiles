@@ -6,7 +6,10 @@ typeset -xT INFOPATH infopath
 typeset -xT SUDO_PATH sudo_path
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  # Login shells initialize Homebrew in .zprofile, after macOS path_helper.
+  if [[ ! -o login ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
   path=(/opt/homebrew/opt/coreutils/libexec/gnubin /opt/homebrew/opt/findutils/libexec/gnubin /opt/homebrew/opt/gnu-sed/libexec/gnubin /opt/homebrew/opt/gnu-tar/libexec/gnubin /opt/homebrew/opt/grep/libexec/gnubin /opt/homebrew/opt/unzip/bin /opt/homebrew/bin /opt/homebrew/sbin $path)
   manpath=(/opt/homebrew/share/man $manpath)
   infopath=(/opt/homebrew/share/info $infopath)

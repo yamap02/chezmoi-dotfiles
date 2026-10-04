@@ -27,5 +27,7 @@ zinit wait'!3' lucid light-mode for \
   paulirish/git-open \
   Tarrasch/zsh-bd \
   MichaelAquilina/zsh-auto-notify \
-  joshskidmore/zsh-fzf-history-search \
+  joshskidmore/zsh-fzf-history-search
+
+zinit wait'!3' lucid light-mode atload'_bind_history_substring_search' for \
   zsh-users/zsh-history-substring-search

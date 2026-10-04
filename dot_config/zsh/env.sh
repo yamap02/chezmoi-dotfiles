@@ -43,7 +43,11 @@ export VOLTA_HOME="$HOME/.volta"
 ## Use `rye` instead of `pyenv`
 # command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
 
-command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+# Interactive shells initialize rbenv after their final PATH is assembled.
+case $- in
+  *i*) ;;
+  *) command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)" ;;
+esac
 # safe_source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 
