@@ -81,10 +81,10 @@ local function update_window_background(window, pane)
     if overrides.color_scheme == nil then
         return
     end
-    if pane:get_user_vars().production == "1" then
+    if pane:get_user_vars().production == "1" and overrides.color_scheme ~= "OneHalfDark" then
         overrides.color_scheme = "OneHalfDark"
+        window:set_config_overrides(overrides)
     end
-    window:set_config_overrides(overrides)
 end
 
 local function update_tmux_style_tab(window, pane)
@@ -151,20 +151,38 @@ local os = require("os")
 wezterm.on("trigger-nvim-with-scrollback", function(window, pane)
     local scrollback = pane:get_lines_as_text()
     local name = os.tmpname()
-    local f = io.open(name, "w+")
-    f:write(scrollback)
-    f:flush()
-    f:close()
-    window:perform_action(
+    local f, err = io.open(name, "w")
+    if not f then
+        os.remove(name)
+        wezterm.log_error("Cannot save scrollback: " .. tostring(err))
+        return
+    end
+    local written, write_err = f:write(scrollback)
+    local closed, close_err = f:close()
+    if not written or not closed then
+        os.remove(name)
+        wezterm.log_error("Cannot save scrollback: " .. tostring(write_err or close_err))
+        return
+    end
+    local ok, spawn_err = pcall(window.perform_action, window,
         act({
             SpawnCommandInNewTab = {
-                args = { os.getenv("HOME") .. "/.local/share/zsh/zinit/polaris/bin/nvim", name },
+                domain = { DomainName = "local" },
+                -- The login shell resolves nvim and owns cleanup until it exits.
+                args = { "/bin/zsh", "-l", "-c", [[
+trap 'command rm -f -- "$1"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' HUP TERM
+command nvim -- "$1"
+]], "wezterm-scrollback", name },
             },
         }),
         pane
     )
-    wezterm.sleep_ms(1000)
-    os.remove(name)
+    if not ok then
+        os.remove(name)
+        wezterm.log_error("Cannot open scrollback: " .. tostring(spawn_err))
+    end
 end)
 
 return M

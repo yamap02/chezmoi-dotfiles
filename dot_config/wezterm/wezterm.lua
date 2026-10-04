@@ -10,14 +10,7 @@ require("on")
 --     return wezterm.font_with_fallback(names, params)
 -- end
 
--- Show which key table is active in the status area
-wezterm.on("update-right-status", function(window, pane)
-    local name = window:active_key_table()
-    if name then
-        name = "TABLE: " .. name
-    end
-    window:set_right_status(name or "")
-end)
+-- SSH domain and active key table are rendered together by on.lua.
 
 -- wezterm.on('gui-startup', function(cmd)
 --   local tab, pane, window = mux.spawn_window(cmd or {width=100, height=36})
