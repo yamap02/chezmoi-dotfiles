@@ -93,6 +93,7 @@ description = "Workspace editing with secret files denied; network requires appr
 "**/.codex/auth.json" = "deny"
 "**/.codex/auth.json.*" = "deny"
 ".git" = "write"
+".agents" = "write"
 
 [permissions.safe-dev.network]
 enabled = false
