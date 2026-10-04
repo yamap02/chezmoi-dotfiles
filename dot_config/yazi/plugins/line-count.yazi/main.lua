@@ -35,7 +35,7 @@ function M:peek(job)
 			},
 			file = job.file,
 			mime = job.mime,
-			skip = job.skip,
+			skip = tonumber(job.skip) or 0,
 		}
 	end
 end
