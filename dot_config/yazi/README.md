@@ -84,9 +84,3 @@ font size のような表示系を変更したくなった場合は、まず `ya
 ## 未移植のもの
 
 `ranger` 独自の bookmark 永続化、`uq` の closed-tab restore、`gL` の hovered path 追従、task view の詳細な操作、`bulkrename` 入力カーソル位置の完全再現まではまだ入れていません。必要ならここから追加します。
-
-## テスト
-
-```sh
-python3 /Users/user/.config/yazi/tests/test_keymap.py
-```
