@@ -50,6 +50,7 @@ macos-titlebar-style = tabs
 # カーソル
 cursor-style = block
 cursor-style-blink = false
+cursor-color = #89dceb
 
 # 動作
 # xterm-256color にすることで ranger 等の TUI アプリとのキーリピート互換性を確保
