@@ -185,7 +185,22 @@ class YaziKeymapMigrationTest(unittest.TestCase):
         )
         self.assertEqual(
             config["open"]["prepend_rules"],
-            [{"mime": "text/html", "use": "browser"}],
+            [
+                {"name": "*.tsx", "use": "nvim"},
+                {"mime": "text/html", "use": "browser"},
+            ],
+        )
+
+    def test_tsx_opener_uses_blocking_neovim(self):
+        config = load_yazi_config()
+        self.assertIn(
+            {
+                "run": "nvim %s",
+                "desc": "Neovim",
+                "block": True,
+                "for": "unix",
+            },
+            config["opener"]["nvim"],
         )
 
 
