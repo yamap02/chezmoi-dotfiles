@@ -17,6 +17,13 @@ function M:peek(job)
 		return
 	end
 
+	-- Keep the same preview arguments as Yazi's built-in code previewer.
+	-- Draw the line-count label afterwards so it overlays the first row.
+	local err = ya.preview_code(job)
+	if err and not err:find("cancelled", 1, true) then
+		ya.dbg("line-count preview failed", err)
+	end
+
 	local header_area = ui.Rect {
 		x = job.area.x,
 		y = job.area.y,
@@ -24,20 +31,6 @@ function M:peek(job)
 		h = math.min(1, job.area.h),
 	}
 	ya.preview_widget(job, ui.Text(string.format("Lines: %s", count)):area(header_area))
-
-	if job.area.h > 1 then
-		ya.preview_code {
-			area = ui.Rect {
-				x = job.area.x,
-				y = job.area.y + 1,
-				w = job.area.w,
-				h = job.area.h - 1,
-			},
-			file = job.file,
-			mime = job.mime,
-			skip = tonumber(job.skip) or 0,
-		}
-	end
 end
 
 function M:seek(job)
