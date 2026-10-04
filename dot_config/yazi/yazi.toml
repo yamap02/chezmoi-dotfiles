@@ -20,7 +20,7 @@ nvim = [{ run = "nvim %s", desc = "Neovim", block = true, for = "unix" }]
 [open]
 # HTML を Yazi のテキスト preview ではなくブラウザーへ渡す。
 prepend_rules = [
-  { name = "*.tsx", use = "nvim" },
+  { url = "*.tsx", use = "nvim" },
   { mime = "text/html", use = "browser" },
 ]
 
