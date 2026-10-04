@@ -20,7 +20,6 @@ return {
     },
     {
         "iamcco/markdown-preview.nvim",
-        ft = { "markdown", "md" },
         build = "cd app && npm install",
         cmd = {
             "MarkdownPreview",
