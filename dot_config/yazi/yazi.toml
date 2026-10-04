@@ -31,6 +31,11 @@ max_height = 720
 # Markdown などの長い行をプレビュー欄の幅で折り返す。
 wrap = "yes"
 
+# テキストファイルのプレビュー先頭に総行数を表示する。
+[[plugin.prepend_previewers]]
+mime = "text/*"
+run = "line-count"
+
 # 既定値を明文化:
 # - font family / font size / line height は Yazi の設定項目に無いため、ターミナルエミュレータ側の設定に従う。
 # - 配色、アイコン、プレビュー見た目は `theme.toml` は未作成のため Yazi 既定のまま使う。
