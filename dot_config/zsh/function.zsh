@@ -12,8 +12,10 @@ function cdf() {
 
 function fbr() {
   local branch
-  branch="$(git branch -vv | fzf +m)" || return
-  git switch "$(awk '{print $1}' <<< "$branch")"
+  branch="$(git branch --format='%(refname:short)%09%(objectname:short) %(upstream:track) %(contents:subject)' | fzf +m)" || return
+  [[ -n "$branch" ]] || return 0
+  branch="${branch%%$'\t'*}"
+  git switch -- "$branch"
 }
 # function select-history() {
 #   BUFFER=$(history -n -r 10 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
