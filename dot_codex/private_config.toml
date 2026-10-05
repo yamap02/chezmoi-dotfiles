@@ -4,37 +4,12 @@ model_reasoning_effort = "medium"
 approvals_reviewer = "user"
 default_permissions = "safe-dev"
 approval_policy = "on-request"
-developer_instructions = "秘密情報の読み取りを目的とする権限昇格を要求せず、safe-dev の秘密情報禁止ルールを回避しない。必要な設定項目は値を含まないサンプルやユーザー提供のマスク済み情報から確認する。"
 notify = [
     "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
     "turn-ended",
 ]
 service_tier = "default"
 
-[auto_review]
-policy = """
-承認リクエストは保守的にレビューすること。
-
-* ファイルシステムおよびネットワークの境界については、`safe-dev` 権限プロファイルを唯一の正しい基準として扱う。ユーザーがその設定変更を明示的に依頼していない限り、これを回避または弱体化しようとするリクエストは拒否する。
-* 強制 push、ブランチ削除、履歴書き換え、リポジトリ削除、ワークフロー実行、リリース／公開、Terraform の apply/destroy、Kubernetes の apply/delete、プロセス終了コマンドなど、破壊的または不可逆な操作は原則として拒否する。ただし、ユーザーがその操作を明示的に依頼しており、対象が明確に特定されている場合を除く。
-* 任意のリモートコードを実行するシェル／ツールリクエスト、またはグローバル／システム全体にソフトウェアをインストールするリクエストは、ユーザーが明示的に依頼していない限り拒否する。
-* 現在のサンドボックス利用目的の範囲内に収まり、既存のセキュリティ強化設定を維持し、かつユーザーが明示したタスクを完了するために必要な、限定的なリクエストのみ承認する。
-* 判断に迷う場合は、承認ではなく拒否を選択する。
-  """
-
-extra_policy = """
-* 保護対象ファイル、書き込み可能なルート、ネットワークアクセスについては、`safe-dev` 権限プロファイルを唯一の正しい基準として扱い、これを回避しない。
-* 以下のシェルコマンドは、ユーザーが明示的に依頼しない限り拒否対象として扱う：
-  `rm -rf`、`sudo`、`git push --force`、`git push -f`、`brew`、`env`、`printenv`、`osascript`、`crontab`、`ssh`、`scp`、`ncat`、`chmod +s`、`git config --global`、`git config --system`、`gh auth`、`history`。
-* `docker push`、`docker login`、`docker system prune`、`docker volume prune` は承認必須として扱う。
-* 公開、リリース、マージ、リポジトリ削除、ワークフロー実行、Terraform の apply/destroy、Kubernetes の apply/delete、ブランチの強制削除、stash drop、プロセス終了コマンドは承認必須として扱う。
-* `curl`、`wget`、`nc` は、接続先が `localhost` または `127.0.0.1` である場合を除き、承認必須として扱う。
-* `npm run` コマンドは常に許可し、承認を要求しない。
-* ネットワーク利用は最小限に抑え、可能な限り localhost を優先する。外部ネットワークアクセスが必要な場合は、事前に確認を求め、ユーザーが指定した具体的な許可対象ドメインのみに範囲を限定する。
-  """
-
-# Local commands may access workspace roots and the runtime paths below.
-# Secret denials apply even when ~/.codex itself is a workspace root.
 [permissions.safe-dev]
 extends = ":workspace"
 description = "Workspace editing with secret files denied; network requires approval."
