@@ -75,6 +75,7 @@ description = "Workspace editing with secret files denied; network requires appr
 "~/.docker/config.json" = "deny"
 "~/.codex/auth.json" = "deny"
 "~/.codex/auth.json.*" = "deny"
+"~/.codex/attachments" = "read"
 "~/.gitconfig" = "read"
 "~/.config/git" = "read"
 
