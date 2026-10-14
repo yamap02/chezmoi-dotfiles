@@ -18,40 +18,50 @@ return {
             },
         },
     },
+    -- ブラウザプレビュー: Node 不要の pure Lua 実装 (KaTeX / Mermaid 対応)
     {
-        "iamcco/markdown-preview.nvim",
-        build = "cd app && npm install",
-        cmd = {
-            "MarkdownPreview",
-            "MarkdownPreviewStop",
-            "MarkdownPreviewToggle",
-        },
-        init = function()
-            vim.g.mkdp_auto_start = 0
-            vim.g.mkdp_auto_close = 1
-            vim.g.mkdp_refresh_slow = 0
-            vim.g.mkdp_command_for_global = 0
-            vim.g.mkdp_open_to_the_world = 0
-            vim.g.mkdp_browser = ""
-            vim.g.mkdp_theme = "dark"
+        "brianhuster/live-preview.nvim",
+        cmd = "LivePreview",
+        config = function()
+            require("livepreview.config").set({
+                port = 5500,
+                browser = "default",
+                -- ファイルのあるディレクトリをルートにする (相対パスの画像を解決するため)
+                dynamic_root = true,
+                sync_scroll = true,
+            })
         end,
         keys = {
             {
                 "<leader>mp",
-                "<cmd>MarkdownPreviewToggle<cr>",
+                function()
+                    if require("livepreview").is_running() then
+                        vim.cmd("LivePreview close")
+                    else
+                        vim.cmd("LivePreview start")
+                    end
+                end,
                 ft = { "markdown", "md" },
                 desc = "Markdown HTML Preview",
             },
         },
     },
+    -- バッファ内レンダリング
     {
         "MeanderingProgrammer/render-markdown.nvim",
-        enabled = false,
         dependencies = {
             "neovim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
         },
         ft = { "markdown", "md" },
+        keys = {
+            {
+                "<leader>mr",
+                "<cmd>RenderMarkdown toggle<cr>",
+                ft = { "markdown", "md" },
+                desc = "Markdown Render Toggle",
+            },
+        },
         ---@module 'render-markdown'
         ---@type render.md.UserConfig
         opts = {
