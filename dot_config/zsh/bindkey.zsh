@@ -6,6 +6,11 @@ function ghq-fzf() {
   src="$(ghq list | fzf)" || return
   if [ -n "$src" ]; then
     root="$(ghq root)" || return
+    # コマンドとして直接実行された場合は ZLE を使わず cd する
+    if [[ -z $WIDGET ]]; then
+      cd -- "$root/$src"
+      return
+    fi
     BUFFER="cd -- ${(q)root}/${(q)src}"
     zle accept-line
   fi
