@@ -16,11 +16,14 @@ play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]
 browser = [{ run = "open %s", desc = "Browser", for = "macos" }]
 # TypeScript React は Neovim で開く。
 nvim = [{ run = "nvim %s", desc = "Neovim", block = true, for = "unix" }]
+# PowerPoint ファイルは LibreOffice で開く。
+libreoffice = [{ run = "open -a LibreOffice %s", desc = "LibreOffice", for = "macos" }]
 
 [open]
 # HTML を Yazi のテキスト preview ではなくブラウザーへ渡す。
 prepend_rules = [
   { url = "*.tsx", use = "nvim" },
+  { url = "*.pptx", use = "libreoffice" },
   { mime = "text/html", use = "browser" },
 ]
 
@@ -58,4 +61,5 @@ run = "line-count"
 #   - image_quality = 75
 # - media open は既定の `open %s` ではなく `open -a IINA %s` を使う。
 # - HTML open は macOS の既定ブラウザーへ `open %s` で渡す。
+# - PPTX open は `open -a LibreOffice %s` で LibreOffice へ渡す。
 # - 追加している挙動差分は `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].rules`、`plugins/smart-enter.yazi/` に限定する。
