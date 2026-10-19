@@ -19,6 +19,7 @@
 - コピー系: `yy`, `dd`, `pp`, `dD`, `a`, `cw`
 - `q` / `Q` / `<Esc>`: 終了後も shell 側の `cwd` 同期を維持したまま終了
 - `dD`: 確認なしでゴミ箱へ送る
+- `E`（Shift-E）: opener ルールを無視して hovered / 選択ファイルを Neovim で直接開く（HTML など通常はブラウザーで開くファイル向け）
 - パスコピー: `yp`, `yd`, `yn`, `y.`
 - タブ: `gn`, `gc`, `<Tab>`, `<BackTab>`
 - ソートと表示: `on`, `om`, `os`, `or`, `zh`, `<C-h>`
