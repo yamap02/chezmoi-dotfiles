@@ -27,6 +27,8 @@ return {
             },
         },
         opts = {
+            -- WARN 以下はポップアップせず履歴のみ（:Notifications で確認）
+            level = vim.log.levels.ERROR,
             -- timeout = 3000,
             timeout = 1,
             background_colour = "#000000",
