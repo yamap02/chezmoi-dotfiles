@@ -25,7 +25,7 @@ desc = "Open with..."
 
 [[mgr.prepend_keymap]]
 on = "E"
-run = 'shell --block -- nvim "$@"'
+run = 'shell --block -- nvim %s'
 desc = "Open hovered or selected files in Neovim (bypass opener rules)"
 
 [[mgr.prepend_keymap]]
