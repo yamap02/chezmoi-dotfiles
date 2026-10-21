@@ -22,6 +22,16 @@ return {
     {
         "brianhuster/live-preview.nvim",
         cmd = "LivePreview",
+        init = function()
+            -- :Preview だけで起動/停止をトグルする
+            vim.api.nvim_create_user_command("Preview", function()
+                if require("livepreview").is_running() then
+                    vim.cmd("LivePreview close")
+                else
+                    vim.cmd("LivePreview start")
+                end
+            end, { desc = "Markdown HTML Preview Toggle" })
+        end,
         config = function()
             require("livepreview.config").set({
                 port = 5500,
@@ -34,13 +44,7 @@ return {
         keys = {
             {
                 "<leader>mp",
-                function()
-                    if require("livepreview").is_running() then
-                        vim.cmd("LivePreview close")
-                    else
-                        vim.cmd("LivePreview start")
-                    end
-                end,
+                "<cmd>Preview<cr>",
                 ft = { "markdown", "md" },
                 desc = "Markdown HTML Preview",
             },
