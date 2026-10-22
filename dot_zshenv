@@ -1,5 +1,6 @@
 # Keep .zshenv safe for non-interactive shells: only global environment setup.
 typeset -U path manpath infopath sudo_path
+typeset -a prefer_path
 typeset -xT PATH path
 typeset -xT MANPATH manpath
 typeset -xT INFOPATH infopath
@@ -10,12 +11,15 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
   if [[ ! -o login ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
-  path=(/opt/homebrew/opt/coreutils/libexec/gnubin /opt/homebrew/opt/findutils/libexec/gnubin /opt/homebrew/opt/gnu-sed/libexec/gnubin /opt/homebrew/opt/gnu-tar/libexec/gnubin /opt/homebrew/opt/grep/libexec/gnubin /opt/homebrew/opt/unzip/bin /opt/homebrew/bin /opt/homebrew/sbin $path)
+  prefer_path=(/opt/homebrew/opt/coreutils/libexec/gnubin /opt/homebrew/opt/findutils/libexec/gnubin /opt/homebrew/opt/gnu-sed/libexec/gnubin /opt/homebrew/opt/gnu-tar/libexec/gnubin /opt/homebrew/opt/grep/libexec/gnubin /opt/homebrew/opt/unzip/bin /opt/homebrew/bin /opt/homebrew/sbin)
   manpath=(/opt/homebrew/share/man $manpath)
   infopath=(/opt/homebrew/share/info $infopath)
 fi
 
-path=("$HOME/bin"(N-/) "$HOME/.local/bin"(N-/) "$HOME/.cargo/bin"(N-/) "$HOME/.rye/shims"(N-/) "$HOME/.deno/bin"(N-/) "$HOME/.go/bin"(N-/) "$HOME/.volta/bin"(N-/) "$HOME/.pyenv/bin"(N-/) "$HOME/.nimble/bin"(N-/) "$HOME/.rbenv/shims"(N-/) /usr/local/go/bin(N-/) /usr/local/bin(N-/) /usr/bin(N-/) /bin(N-/) /usr/sbin(N-/) /sbin(N-/) $path)
+# ユーザー/Homebrew のコマンドを /usr/bin の Apple shim (pip3, python3, gcc 等) より優先する。
+# ログインシェルでは /etc/zprofile の path_helper が並べ替えるため、.zprofile で prefer_path を付け直す。
+prefer_path=("$HOME/bin"(N-/) "$HOME/.local/bin"(N-/) "$HOME/.cargo/bin"(N-/) "$HOME/.rye/shims"(N-/) "$HOME/.deno/bin"(N-/) "$HOME/.go/bin"(N-/) "$HOME/.volta/bin"(N-/) "$HOME/.pyenv/bin"(N-/) "$HOME/.nimble/bin"(N-/) "$HOME/.rbenv/shims"(N-/) $prefer_path)
+path=($prefer_path $path /usr/local/go/bin(N-/) /usr/local/bin(N-/) /usr/bin(N-/) /bin(N-/) /usr/sbin(N-/) /sbin(N-/))
 fpath=("$HOME/.config/zsh/zfunc"(N-/) "$HOME/.config/zsh/completion"(N-/) /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions $fpath)
 
 export LESS_TERMCAP_mb=$'\e[1;31m'
