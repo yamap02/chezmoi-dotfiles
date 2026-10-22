@@ -34,7 +34,6 @@ alias l.='ls -d .[a-zA-Z]*'
 # colorize
 # alias grep='grep --color=auto'
 alias diff='diff --color=auto'
-alias ip='ip --color=auto'
 
 # My
 # alias r='ranger-cd'
@@ -43,9 +42,6 @@ alias lg='lazygit'
 alias ld='lazydocker'
 # alias S='shutdown -h now'
 alias S='sudo shutdown -h now'
-alias R='systemctl reboot -i'
-alias T='sudo timeshift-launcher'
-alias makepkg='makepkg -cis'
 alias mkd='mkdir'
 alias n='nvim'
 # alias n='~/nvim.appimage'
@@ -63,7 +59,6 @@ alias unzipS='unzip -Ocp932'  ###shift>utf-8
 # alias pa="pipenv shell"
 command -v poetry >/dev/null 2>&1 && alias pa="poetry shell"
 alias bash="bash --norc"
-alias yayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy="yes | yay -Syu --overwrite \"/usr/lib/node_modules/npm/node_modules/*\" ; paccache -r; paccache -ruk0"
 # alias yayy="yes | yay -Syu ; paccache -r; paccache -ruk0"
 # alias ls="exa"
 # alias tree="exa"
@@ -84,7 +79,6 @@ alias gs='git switch'
 # alias diff='diff --color=always -bwB'
 # alias less='less -RS --use-color'
 alias grep='grep --color=always'
-alias fa='sudo pacman-mirrors --fasttrack && sudo pacman -Syy'
 command -v rmtrash >/dev/null 2>&1 && alias rm='rmtrash'
 # alias rmdir='rmdirtrash'
 
@@ -114,6 +108,16 @@ alias move-buttom='tput cup $(($(stty size|cut -d " " -f 1))) 0 && tput ed'
 (command -v batcat > /dev/null 2>&1) && alias bat='batcat'
 
 [[ "$OSTYPE" != darwin* ]] && alias open='xdg-open'
+
+# Linux 専用 (iproute2 / systemd / Arch)。macOS には実体が無いので定義しない
+if [[ "$OSTYPE" == linux* ]]; then
+  alias ip='ip --color=auto'
+  alias R='systemctl reboot -i'
+  alias T='sudo timeshift-launcher'
+  alias makepkg='makepkg -cis'
+  alias yayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy="yes | yay -Syu --overwrite \"/usr/lib/node_modules/npm/node_modules/*\" ; paccache -r; paccache -ruk0"
+  alias fa='sudo pacman-mirrors --fasttrack && sudo pacman -Syy'
+fi
 
 # g++
 alias g+='g++ -std=c++17 -g2 -Og -DLOCAL_DEBUG -Wall -Wextra -Wshadow -Wconversion -fsanitize=address,undefined -ftrapv'
