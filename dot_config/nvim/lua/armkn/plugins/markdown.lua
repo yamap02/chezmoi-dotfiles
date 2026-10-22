@@ -35,7 +35,8 @@ return {
         config = function()
             require("livepreview.config").set({
                 port = 5500,
-                browser = "default",
+                -- macOS ではプレビューを Brave で開く (他OSは既定ブラウザ)
+                browser = vim.fn.has("mac") == 1 and "open -a 'Brave Browser'" or "default",
                 -- ファイルのあるディレクトリをルートにする (相対パスの画像を解決するため)
                 dynamic_root = true,
                 sync_scroll = true,
