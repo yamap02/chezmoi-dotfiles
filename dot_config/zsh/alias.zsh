@@ -1,4 +1,3 @@
-alias mkdir="mkdir -p"
 alias quit='exit'
 # alias rezsh='exec zsh'
 
@@ -19,21 +18,18 @@ elif builtin command -v exa > /dev/null 2>&1; then
 fi
 
 # alias rm='rm -iv'
-alias mv='mv -iv'
-alias cp='cp -iv'
-alias ln='ln -v'
 
 # ls
+# 標準コマンド名 (ls/cat/wc/grep など) は上書きしない (例外: rm→rmtrash)。
+# Claude Code などの非対話実行でも zsh 設定が読まれ、挙動が変わって失敗するため。
 alias l='ls -F --color=auto -1'
-alias ls='ls -F --color=auto'
-alias ll='ls -lh'
-alias la='ls -a'
+alias ll='ls -F --color=auto -lh'
+alias la='ls -F --color=auto -a'
 alias lla='ll -a'
 alias ltr='ll -tr'
-alias l.='ls -d .[a-zA-Z]*'
+alias l.='ls -F --color=auto -d .[a-zA-Z]*'
 # colorize
 # alias grep='grep --color=auto'
-alias diff='diff --color=auto'
 
 # My
 # alias r='ranger-cd'
@@ -42,11 +38,10 @@ alias lg='lazygit'
 alias ld='lazydocker'
 # alias S='shutdown -h now'
 alias S='sudo shutdown -h now'
-alias mkd='mkdir'
+alias mkd='mkdir -p'
 alias n='nvim'
 # alias n='~/nvim.appimage'
 alias p='python'
-command -v colormake >/dev/null 2>&1 && alias make='colormake'
 command -v unar >/dev/null 2>&1 && alias un='unar'
 ##tmux
 # alias t='tmux'
@@ -58,12 +53,9 @@ command -v unar >/dev/null 2>&1 && alias un='unar'
 alias unzipS='unzip -Ocp932'  ###shift>utf-8
 # alias pa="pipenv shell"
 command -v poetry >/dev/null 2>&1 && alias pa="poetry shell"
-alias bash="bash --norc"
 # alias yayy="yes | yay -Syu ; paccache -r; paccache -ruk0"
 # alias ls="exa"
 # alias tree="exa"
-command -v bat >/dev/null 2>&1 && alias cat="bat"
-command -v tokei >/dev/null 2>&1 && alias wc="tokei"
 
 command -v docker-compose >/dev/null 2>&1 && alias up-d="docker-compose up -d"
 command -v docker-compose >/dev/null 2>&1 && alias down="docker-compose down"
@@ -78,7 +70,6 @@ alias gs='git switch'
 
 # alias diff='diff --color=always -bwB'
 # alias less='less -RS --use-color'
-alias grep='grep --color=always'
 command -v rmtrash >/dev/null 2>&1 && alias rm='rmtrash'
 # alias rmdir='rmdirtrash'
 
@@ -111,18 +102,14 @@ alias move-buttom='tput cup $(($(stty size|cut -d " " -f 1))) 0 && tput ed'
 
 # Linux 専用 (iproute2 / systemd / Arch)。macOS には実体が無いので定義しない
 if [[ "$OSTYPE" == linux* ]]; then
-  alias ip='ip --color=auto'
   alias R='systemctl reboot -i'
   alias T='sudo timeshift-launcher'
-  alias makepkg='makepkg -cis'
   alias yayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy="yes | yay -Syu --overwrite \"/usr/lib/node_modules/npm/node_modules/*\" ; paccache -r; paccache -ruk0"
   alias fa='sudo pacman-mirrors --fasttrack && sudo pacman -Syy'
 fi
 
 # g++
 alias g+='g++ -std=c++17 -g2 -Og -DLOCAL_DEBUG -Wall -Wextra -Wshadow -Wconversion -fsanitize=address,undefined -ftrapv'
-
-alias vim='vim -X'
 
 # nim
 alias nimr='nim cpp --hints:off --run'
