@@ -20,7 +20,7 @@ fi
 # alias rm='rm -iv'
 
 # ls
-# 標準コマンド名 (ls/cat/wc/grep/rm など) は上書きしない。
+# 標準コマンド名 (ls/cat/wc/grep など) は上書きしない (例外: rm→rmtrash)。
 # Claude Code などの非対話実行でも zsh 設定が読まれ、挙動が変わって失敗するため。
 alias l='ls -F --color=auto -1'
 alias ll='ls -F --color=auto -lh'
@@ -70,6 +70,7 @@ alias gs='git switch'
 
 # alias diff='diff --color=always -bwB'
 # alias less='less -RS --use-color'
+command -v rmtrash >/dev/null 2>&1 && alias rm='rmtrash'
 # alias rmdir='rmdirtrash'
 
 # chmod
