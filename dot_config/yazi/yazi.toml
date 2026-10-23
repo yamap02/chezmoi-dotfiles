@@ -28,6 +28,7 @@ prepend_rules = [
   { url = "*.pptx", use = "libreoffice" },
   { url = "*.docx", use = "libreoffice" },
   { url = "*.xlsx", use = "libreoffice" },
+  { url = "*.xlsm", use = "libreoffice" },
   { mime = "text/html", use = "browser" },
 ]
 
@@ -65,5 +66,5 @@ run = "line-count"
 #   - image_quality = 75
 # - media open は既定の `open %s` ではなく `open -a IINA %s` を使う。
 # - HTML open は macOS の既定ブラウザーへ `open %s` で渡す。
-# - PPTX・DOCX・XLSX open は `open -a LibreOffice %s` で LibreOffice へ渡す。
+# - PPTX・DOCX・XLSX・XLSM open は `open -a LibreOffice %s` で LibreOffice へ渡す。
 # - 追加している挙動差分は `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].rules`、`plugins/smart-enter.yazi/` に限定する。
