@@ -41,6 +41,18 @@ return {
                 dynamic_root = true,
                 sync_scroll = true,
             })
+
+            -- 同梱の github-markdown.css は本文幅を 980px に固定して中央寄せするため、
+            -- 生成 HTML に上書き CSS を差し込んでウィンドウ幅いっぱいに広げる
+            -- (カスタム CSS の設定項目が無いので md2html をラップする)
+            local template = require("livepreview.template")
+            local md2html = template.md2html
+            template.md2html = function(md)
+                local style = "<style>.markdown-body{max-width:none;margin:16px 32px}</style>"
+                return (md2html(md):gsub("</head>", function()
+                    return style .. "</head>"
+                end, 1))
+            end
         end,
         keys = {
             {
