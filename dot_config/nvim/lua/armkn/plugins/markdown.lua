@@ -42,16 +42,27 @@ return {
                 sync_scroll = true,
             })
 
-            -- 同梱の github-markdown.css は本文幅を 980px に固定して中央寄せするため、
-            -- 生成 HTML に上書き CSS を差し込んでウィンドウ幅いっぱいに広げる
+            -- 同梱の github-markdown.css は本文幅を 980px に固定するため、
+            -- 生成 HTML に上書き CSS を差し込んで少し広げる (表が多い文書向けに 1280px)
             -- (カスタム CSS の設定項目が無いので md2html をラップする)
+            local style = "<style>.markdown-body{max-width:1280px;margin:32px auto;padding:0 32px}</style>"
             local template = require("livepreview.template")
             local md2html = template.md2html
             template.md2html = function(md)
-                local style = "<style>.markdown-body{max-width:none;margin:16px 32px}</style>"
                 return (md2html(md):gsub("</head>", function()
                     return style .. "</head>"
                 end, 1))
+            end
+
+            -- ETag は .md とテンプレートの mtime だけで決まり、上の CSS を変えても
+            -- ブラウザが 304 で古い HTML を使い続けるので、CSS の中身を ETag に混ぜる
+            -- (handler が generate を取り込む前に差し替える必要がある)
+            local etag = require("livepreview.server.utils.etag")
+            local generate = etag.generate
+            local style_hash = vim.fn.sha256(style):sub(1, 8)
+            etag.generate = function(file_path)
+                local tag = generate(file_path)
+                return tag and (tag .. "-" .. style_hash)
             end
         end,
         keys = {
