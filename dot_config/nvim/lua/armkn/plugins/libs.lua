@@ -20,7 +20,6 @@ return {
         },
     },
     { "folke/todo-comments.nvim", event = "BufReadPost", cmd = { "TodoLocList", "TodoQuickFix" } },
-    { "kana/vim-smartchr", event = "InsertEnter" },
     -- vim-quickrun disabled (code runner, not needed)
     -- nvim-navic disabled (LSP breadcrumb, not needed without LSP)
 }
