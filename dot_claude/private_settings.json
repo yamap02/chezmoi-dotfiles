@@ -4,7 +4,6 @@
   "autoUpdatesChannel": "stable",
   "permissions": {
     "defaultMode": "acceptEdits",
-    "disableBypassPermissionsMode": "disable",
     "ask": [
       "Bash(git push *)",
       "Bash(git reset --hard *)",
