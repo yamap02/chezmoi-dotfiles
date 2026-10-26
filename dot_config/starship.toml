@@ -1,3 +1,7 @@
+# Allow slow cold starts of version probes (e.g. `node --version`) to finish
+# instead of printing timeout warnings. The default is 500ms.
+command_timeout = 1000
+
 # Keep the active gcloud context available to gcloud itself without exposing
 # the authenticated account email in the shell prompt.
 [gcloud]
