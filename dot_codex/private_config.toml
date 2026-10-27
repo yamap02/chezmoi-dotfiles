@@ -114,6 +114,19 @@ enabled = false
 mode = "limited"
 allow_local_binding = false
 
+[permissions.safe-dev-web]
+extends = "safe-dev"
+description = "safe-dev plus network access to localhost only, for browser verification of local dev servers."
+
+[permissions.safe-dev-web.network]
+enabled = true
+mode = "limited"
+allow_local_binding = false
+
+[permissions.safe-dev-web.network.domains]
+"localhost" = "allow"
+"127.0.0.1" = "allow"
+
 [marketplaces.openai-bundled]
 source_type = "local"
 source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
