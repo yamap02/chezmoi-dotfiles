@@ -16,8 +16,8 @@ play = [{ run = "open -a IINA %s", desc = "IINA", for = "macos" }]
 browser = [{ run = "open %s", desc = "Browser", for = "macos" }]
 # TypeScript / TypeScript React は Neovim で開く。
 nvim = [{ run = "nvim %s", desc = "Neovim", block = true, for = "unix" }]
-# PowerPoint・Word・Excel ファイルは LibreOffice で開く。
-libreoffice = [{ run = "open -a LibreOffice %s", desc = "LibreOffice", for = "macos" }]
+# PowerPoint・Word・Excel ファイルは ibisOffice で開く。
+ibisoffice = [{ run = "open -a ibisOffice %s", desc = "ibisOffice", for = "macos" }]
 
 [open]
 # HTML を Yazi のテキスト preview ではなくブラウザーへ渡す。
@@ -25,10 +25,10 @@ prepend_rules = [
   # `.ts` は MPEG-TS 動画と判定されやすいため、mime より先に拡張子で Neovim へ渡す。
   { url = "*.ts", use = "nvim" },
   { url = "*.tsx", use = "nvim" },
-  { url = "*.pptx", use = "libreoffice" },
-  { url = "*.docx", use = "libreoffice" },
-  { url = "*.xlsx", use = "libreoffice" },
-  { url = "*.xlsm", use = "libreoffice" },
+  { url = "*.pptx", use = "ibisoffice" },
+  { url = "*.docx", use = "ibisoffice" },
+  { url = "*.xlsx", use = "ibisoffice" },
+  { url = "*.xlsm", use = "ibisoffice" },
   { mime = "text/html", use = "browser" },
 ]
 
@@ -66,5 +66,5 @@ run = "line-count"
 #   - image_quality = 75
 # - media open は既定の `open %s` ではなく `open -a IINA %s` を使う。
 # - HTML open は macOS の既定ブラウザーへ `open %s` で渡す。
-# - PPTX・DOCX・XLSX・XLSM open は `open -a LibreOffice %s` で LibreOffice へ渡す。
+# - PPTX・DOCX・XLSX・XLSM open は `open -a ibisOffice %s` で ibisOffice へ渡す。
 # - 追加している挙動差分は `keymap.toml`、`[mgr].ratio`、`[opener]`、`[open].rules`、`plugins/smart-enter.yazi/` に限定する。
