@@ -2,7 +2,7 @@ personality = "pragmatic"
 model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
 approvals_reviewer = "user"
-default_permissions = "safe-dev"
+default_permissions = "safe-dev-web"
 approval_policy = "on-request"
 notify = [
     "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
