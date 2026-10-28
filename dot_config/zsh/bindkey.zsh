@@ -43,3 +43,13 @@ _bind_history_substring_search
 
 # Cmd-P (Ghostty が Ctrl-P として送信): 入力先頭に一致する履歴を遡る
 bindkey -M emacs '^p' history-beginning-search-backward
+
+# Orca: TUI が kitty キーボードプロトコル / modifyOtherKeys を解除せずに終わると
+# キー入力が "9;5u" のような数字列になるため、プロンプト表示のたびに解除する
+function _orca_reset_keyboard_protocol() {
+  [[ -t 1 ]] || return 0
+  printf '\e[=0u\e[>4;0m'
+}
+if [[ -n "${ORCA_PANE_KEY-}" ]]; then
+  add-zsh-hook precmd _orca_reset_keyboard_protocol
+fi
