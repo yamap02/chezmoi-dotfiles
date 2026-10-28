@@ -2,7 +2,7 @@ personality = "pragmatic"
 model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
 approvals_reviewer = "user"
-default_permissions = "safe-dev-web"
+default_permissions = "dev"
 approval_policy = "on-request"
 notify = [
     "/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
@@ -126,6 +126,33 @@ allow_local_binding = false
 [permissions.safe-dev-web.network.domains]
 "localhost" = "allow"
 "127.0.0.1" = "allow"
+
+[permissions.dev]
+extends = ":workspace"
+description = "Minimal restrictions: read anywhere, write workspace/tmp/caches, full network; only credential stores denied."
+
+[permissions.dev.filesystem]
+":root" = "read"
+":tmpdir" = "write"
+":slash_tmp" = "write"
+"~/.cache" = "write"
+"~/.npm" = "write"
+"~/.docker/buildx" = "write"
+"~/.ssh" = "deny"
+"~/.aws" = "deny"
+"~/.gnupg" = "deny"
+"~/.codex/auth.json" = "deny"
+"~/.codex/auth.json.*" = "deny"
+
+[permissions.dev.filesystem.":workspace_roots"]
+"." = "write"
+".git" = "write"
+".agents" = "write"
+
+[permissions.dev.network]
+enabled = true
+mode = "full"
+allow_local_binding = true
 
 [marketplaces.openai-bundled]
 source_type = "local"
