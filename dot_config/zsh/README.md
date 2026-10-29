@@ -39,3 +39,14 @@ zinit がなければ警告を stderr に表示し、残りのシェル設定は
 rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 exec zsh
 ```
+
+## atuin
+
+Ctrl-R の履歴検索は [atuin](https://atuin.sh/) を使います。設定は `~/.config/atuin/config.toml` です。
+上矢印は従来どおり `zsh-history-substring-search` に割り当てています。
+atuin が未インストールの環境では `zsh-fzf-history-search` を代わりに読み込みます。
+
+```sh
+brew install atuin
+atuin import zsh   # 既存の ~/.zsh_history を取り込む (初回のみ)
+```

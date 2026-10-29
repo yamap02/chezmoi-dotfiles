@@ -26,8 +26,13 @@ zinit wait'!3' lucid light-mode for \
   mollifier/cd-gitroot \
   paulirish/git-open \
   Tarrasch/zsh-bd \
-  MichaelAquilina/zsh-auto-notify \
-  joshskidmore/zsh-fzf-history-search
+  MichaelAquilina/zsh-auto-notify
+
+# Ctrl-R の履歴検索は atuin (external_tool_init.zsh) に任せる。未インストール時だけ fzf 版を使う
+if ! command -v atuin > /dev/null 2>&1; then
+  zinit wait'!3' lucid light-mode for \
+    joshskidmore/zsh-fzf-history-search
+fi
 
 zinit wait'!3' lucid light-mode atload'_bind_history_substring_search' for \
   zsh-users/zsh-history-substring-search
