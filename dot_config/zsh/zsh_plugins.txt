@@ -1,0 +1,22 @@
+# antidote のプラグイン一覧 (plugins.zsh が読み込む)
+# kind:defer は zsh-defer で .zshrc の読み込み完了後に順に読む。compinit より後になる
+
+# 補完定義。compinit より前に fpath へ追加する
+zsh-users/zsh-completions path:src kind:fpath
+
+mollifier/cd-gitroot
+paulirish/git-open
+# 読み込み時に compdef を呼ぶので compinit の後に読む
+Tarrasch/zsh-bd kind:defer
+MichaelAquilina/zsh-auto-notify
+zsh-users/zsh-history-substring-search
+
+# Ctrl-R は atuin に任せる。atuin が無い環境だけ fzf 版を使う
+joshskidmore/zsh-fzf-history-search conditional:_zsh_plugins_without_atuin
+
+# fzf-tab は compinit の後、ウィジェットを包むプラグインより前に読む
+Aloxaf/fzf-tab kind:defer
+# 入力中の文字列から薄い色でコマンドを提案
+zsh-users/zsh-autosuggestions kind:defer
+# コマンドラインの色付け (ウィジェットを包むので最後)
+zdharma-continuum/fast-syntax-highlighting kind:defer

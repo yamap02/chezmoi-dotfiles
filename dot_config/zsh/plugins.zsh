@@ -1,38 +1,20 @@
-if [[ ! -r "$HOME/.zinit/bin/zinit.zsh" ]]; then
-  print -u2 "zsh: zinit is not installed; skipping plugins"
+typeset antidote_path=/opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+[[ -r "$antidote_path" ]] || antidote_path="$HOME/.antidote/antidote.zsh"
+if [[ ! -r "$antidote_path" ]]; then
+  print -u2 "zsh: antidote is not installed; skipping plugins"
+  unset antidote_path
   return 0
 fi
 
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-### End of Zinit's installer chunk
+source "$antidote_path"
+unset antidote_path
 
+# zsh_plugins.txt から生成する静的ファイルはキャッシュに置く。txt が更新されると再生成される
+zstyle ':antidote:bundle' file "$ZDOTDIR/zsh_plugins.txt"
+zstyle ':antidote:static' file "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zsh_plugins.zsh"
+zstyle ':antidote:bundle' use-friendly-names on
 
-# コマンドラインの色付け
-zinit light zdharma/fast-syntax-highlighting
+function _zsh_plugins_without_atuin() { ! (( $+commands[atuin] )) }
 
-# コマンドラインに入力されている文字列をもとに薄い色でコマンドを提案
-# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
-zinit light zsh-users/zsh-autosuggestions
-
-# Ctrl+x -> Ctrl+b で Git ブランチを表示してインタラクティブに絞り込みして切り替え
-# zinit ice wait'!3' lucid atload"bindkey '^x^b' anyframe-widget-checkout-git-branch"
-
-zinit wait'!1' lucid light-mode for \
-  zsh-users/zsh-completions
-
-zinit wait'!3' lucid light-mode for \
-  mollifier/cd-gitroot \
-  paulirish/git-open \
-  Tarrasch/zsh-bd \
-  MichaelAquilina/zsh-auto-notify
-
-# Ctrl-R の履歴検索は atuin (external_tool_init.zsh) に任せる。未インストール時だけ fzf 版を使う
-if ! command -v atuin > /dev/null 2>&1; then
-  zinit wait'!3' lucid light-mode for \
-    joshskidmore/zsh-fzf-history-search
-fi
-
-zinit wait'!3' lucid light-mode atload'_bind_history_substring_search' for \
-  zsh-users/zsh-history-substring-search
+antidote load
+_bind_history_substring_search

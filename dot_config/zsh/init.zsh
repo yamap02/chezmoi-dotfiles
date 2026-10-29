@@ -1,6 +1,6 @@
 typeset -g ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
 
-for zsh_config in environment base completion function alias bindkey plugins external_tool_init; do
+for zsh_config in environment base function alias bindkey plugins completion external_tool_init; do
   typeset zsh_config_path="$ZDOTDIR/$zsh_config.zsh"
   [[ -r "$zsh_config_path" ]] || {
     print -u2 "zsh: missing config: $zsh_config_path"

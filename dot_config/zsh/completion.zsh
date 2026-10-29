@@ -5,7 +5,7 @@
 
 # :completion:function:completer:command:argument:tag
 
-# zinit の遅延ロードには依存せず、補完の初期化をこの設定で明示する。
+# 補完の初期化をこの設定で明示する。plugins.zsh で zsh-completions を fpath に足した後に読む。
 autoload -Uz compinit
 typeset -g ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 command mkdir -p "${ZSH_COMPDUMP:h}"
@@ -28,7 +28,8 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*' completer _oldlist _complete _ignored
 zstyle ':completion:*:messages' format '%F{yellow}%d'
 zstyle ':completion:*:warnings' format '%B%F{red}No matches for:''%F{white}%d%b'
-zstyle ':completion:*:descriptions' format '%B%F{white}--- %d ---%f%b'
+# fzf-tab はこの書式でグループ名を表示する (色のエスケープを入れると fzf 上で崩れる)
+zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion::corrections' format ' %F{green}%d (errors: %e) %f'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*' group-name ''
@@ -41,9 +42,8 @@ zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
 # 一部のコマンドライン定義は、展開時に時間のかかる処理を行う -- apt-get, dpkg (Debian), rpm (Redhat), urpmi (Mandrake), perlの-Mオプション, bogofilter (zsh 4.2.1以降), fink, mac_apps (MacOS X)(zsh 4.2.2以降)
 zstyle ':completion:*' use-cache true
-# 補完候補を ←↓↑→ で選択 (補完候補が色分け表示される)
-# zstyle show completion menu if 1 or more items to select
-zstyle ':completion:*:default' menu select=1
+# 補完候補の選択は fzf-tab に任せるので、zsh 標準の補完メニューは出さない
+zstyle ':completion:*' menu no
 # カレントディレクトリに候補がない場合のみ cdpath 上のディレクトリを候補
 zstyle ':completion:*:cd:*' tag-order local-directories path-directories
 # 補完リストの順番指定
@@ -65,3 +65,15 @@ zstyle ':completion:*' use-compctl true
 
 # make targets are completed by ~/.config/zsh/completion/_make
 zstyle ':completion:*:make::' tag-order targets
+
+# fzf-tab (Tab 補完を fzf で絞り込む)
+# git checkout の候補は git の並び (最近のブランチ順) のまま出す
+zstyle ':completion:*:git-checkout:*' sort false
+# FZF_DEFAULT_OPTS の Ctrl-J/K 移動などを fzf-tab でも使う
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+# < と > で補完候補のグループを切り替える
+zstyle ':fzf-tab:*' switch-group '<' '>'
+# cd の候補はディレクトリの中身、ファイルの候補は先頭部分をプレビューする
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons=never -- $realpath'
+zstyle ':fzf-tab:complete:(nvim|vim|cat|bat|less):*' fzf-preview \
+  '[[ -d $realpath ]] && eza -1 --color=always -- $realpath || bat --color=always --style=plain --line-range=:100 -- $realpath'

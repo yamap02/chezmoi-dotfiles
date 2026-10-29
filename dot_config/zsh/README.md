@@ -19,16 +19,28 @@ zsh /Users/user/.config/zsh/tests/test_yazi_wrapper.zsh
 `dot_zshrc` はこのディレクトリを固定順で読み込みます。設定ファイルが
 見つからない場合は、起動を続けずエラーを stderr に表示します。
 
-## zinit
+## antidote
 
-シェル起動時に zinit を clone しません。必要な場合は一度だけインストールします。
+プラグインは [antidote](https://github.com/mattmc3/antidote) で管理し、一覧は `zsh_plugins.txt` に書きます。
+`zsh_plugins.txt` から生成した静的ファイル (`~/.cache/zsh/zsh_plugins.zsh`) を読むので、
+txt を変えない限り起動時にプラグインの解決処理は走りません。
 
 ```sh
-command mkdir -p "$HOME/.zinit"
-command git clone https://github.com/zdharma-continuum/zinit.git "$HOME/.zinit/bin"
+brew install antidote
+antidote update   # プラグインを更新する
 ```
 
-zinit がなければ警告を stderr に表示し、残りのシェル設定は読み込みます。
+antidote がなければ警告を stderr に表示し、残りのシェル設定は読み込みます。
+読み込み順は `plugins.zsh` → `completion.zsh` です。`zsh-completions` を fpath に足してから compinit します。
+`kind:defer` のプラグイン (fzf-tab / autosuggestions / fast-syntax-highlighting) は
+起動完了後にこの順で読み込まれます。
+
+## fzf-tab
+
+Tab 補完の候補を fzf で絞り込みます。設定は `completion.zsh` の末尾にあります。
+
+- `<` / `>`: 補完候補のグループを切り替える
+- `cd` ではディレクトリの中身、`nvim` / `cat` などではファイルの先頭をプレビューする
 
 ## 補完キャッシュ
 
