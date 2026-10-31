@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "contextWindowTokens": 200000,
+  "warnAtPercent": 75,
+  "thresholdTokens": 150000,
+  "remindEverySec": 1800,
+  "configuredAt": "2026-10-14T09:00:00+09:00",
+  "note": "利用者が初回設定で回答した内容。変更は session-checkpoint スキルの「設定の変更」で"
+}
