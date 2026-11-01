@@ -6,3 +6,16 @@ command_timeout = 1000
 # the authenticated account email in the shell prompt.
 [gcloud]
 disabled = true
+
+# Show the exit code of a failed command, per stage of a pipeline.
+[status]
+disabled = false
+pipestatus = true
+
+# Show whether the current .envrc is loaded and allowed.
+[direnv]
+disabled = false
+
+# Show added/deleted line counts of uncommitted changes.
+[git_metrics]
+disabled = false
