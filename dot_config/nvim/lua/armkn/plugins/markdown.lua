@@ -27,14 +27,30 @@ return {
             vim.api.nvim_create_user_command("Preview", function()
                 if require("livepreview").is_running() then
                     vim.cmd("LivePreview close")
-                else
-                    vim.cmd("LivePreview start")
+                    return
                 end
+                -- 別の nvim が同じポートでプレビュー中だと listen が黙って失敗し、
+                -- ブラウザがそちらのサーバー (別ルート) に繋がって 404 になるので、
+                -- 5500 から空いているポートを探して使う
+                -- (libuv は使用中でも bind は成功し、listen で EADDRINUSE を返す)
+                local port = 5500
+                while true do
+                    local tcp = vim.uv.new_tcp()
+                    tcp:bind("127.0.0.1", port)
+                    local _, _, err = tcp:listen(1, function() end)
+                    tcp:close()
+                    if err ~= "EADDRINUSE" then
+                        break
+                    end
+                    port = port + 1
+                end
+                require("livepreview.config").set({ port = port })
+                vim.cmd("LivePreview start")
             end, { desc = "Markdown HTML Preview Toggle" })
         end,
         config = function()
             require("livepreview.config").set({
-                port = 5500,
+                -- port は :Preview で空いているものを都度設定する
                 -- macOS ではプレビューを Brave で開く (他OSは既定ブラウザ)
                 browser = vim.fn.has("mac") == 1 and "open -a 'Brave Browser'" or "default",
                 -- ファイルのあるディレクトリをルートにする (相対パスの画像を解決するため)
