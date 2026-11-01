@@ -2,14 +2,8 @@
 # instead of printing timeout warnings. The default is 500ms.
 command_timeout = 1000
 
-# Keep the left side to location and git state; language versions go right.
-# $all would also repeat the right-side modules on the left, so list them.
-format = """
-$username$hostname$shlvl$directory\
-$git_branch$git_commit$git_state$git_metrics$git_status\
-$docker_context$direnv$cmd_duration\
-$line_break\
-$jobs$status$container$character"""
+# Language versions go right. $all skips modules placed in right_format.
+format = "$all"
 right_format = "$python$golang$rust$terraform"
 
 # Probing `node --version` took ~60ms per prompt in a Node project.
