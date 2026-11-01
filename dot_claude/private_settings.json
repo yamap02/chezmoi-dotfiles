@@ -6,6 +6,22 @@
   "autoUpdatesChannel": "stable",
   "permissions": {
     "defaultMode": "auto",
+    "allow": [
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git diff*)",
+      "Bash(git rev-parse *)",
+      "Bash(git ls-files*)",
+      "Bash(ls)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)"
+    ],
     "ask": [
       "Bash(git push *)",
       "Bash(git reset --hard *)",
