@@ -62,3 +62,21 @@ atuin が未インストールの環境では `zsh-fzf-history-search` を代わ
 brew install atuin
 atuin import zsh   # 既存の ~/.zsh_history を取り込む (初回のみ)
 ```
+
+## T3 terminal colors
+
+`terminal-colors.zsh` は `T3CODE_PROJECT_ROOT` があり、標準出力が端末の場合だけ、
+OSC 4 で標準16色を Sonokai 系へ、OSC 10/12 で本文とカーソルを明るい灰白色へ設定します。
+暗い背景は T3 のテーマ設定（現在 `#2c2e34`）を使用します。
+青・紫・補助の灰色を明るくし、fzf の候補・選択行・境界にも RGB 色を指定します。
+ANSI の黒は色付き背景に載せる文字用に暗い色を維持します。
+アプリが独自に指定する 256 色や RGB 色、dim 属性まで一括変換はできません。
+Yazi は `../yazi/theme.toml` でもアイコンを含めて RGB 色を指定しています。
+
+新しい T3 ターミナルには起動時に適用されます。既存ターミナルへの反映:
+
+```sh
+source ~/.config/zsh/terminal-colors.zsh
+```
+
+Yazi を開いている場合は `q` で終了し、`r` で開き直すとテーマが反映されます。

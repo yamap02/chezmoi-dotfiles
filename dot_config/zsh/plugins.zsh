@@ -21,6 +21,7 @@ _bind_history_substring_search
 
 # T3 の暗いターミナルで、入力中のコマンドと文字列を Sonokai の色で読みやすくする。
 if [[ -n ${T3CODE_PROJECT_ROOT:-} ]] && (( $+functions[zsh-defer] )); then
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#a0a0aa'
   function _t3_sonokai_syntax_colors() {
     (( $+parameters[FAST_HIGHLIGHT_STYLES] )) || return
     local key
@@ -34,6 +35,10 @@ if [[ -n ${T3CODE_PROJECT_ROOT:-} ]] && (( $+functions[zsh-defer] )); then
       FAST_HIGHLIGHT_STYLES[$key]='fg=#76cce0'
     done
     FAST_HIGHLIGHT_STYLES[unknown-token]='fg=#fc5d7c,bold'
+    FAST_HIGHLIGHT_STYLES[comment]='fg=#a0a0aa'
+    FAST_HIGHLIGHT_STYLES[default]='fg=#e2e2e3'
+    FAST_HIGHLIGHT_STYLES[reserved-word]='fg=#b39df3'
+    FAST_HIGHLIGHT_STYLES[path]='fg=#e2e2e3,underline'
   }
   zsh-defer _t3_sonokai_syntax_colors
 fi
