@@ -46,7 +46,7 @@ run = "line-count"
 
 # 既定値を明文化:
 # - font family / font size / line height は Yazi の設定項目に無いため、ターミナルエミュレータ側の設定に従う。
-# - 配色、アイコン、プレビュー見た目は `theme.toml` は未作成のため Yazi 既定のまま使う。
+# - 配色は `theme.toml` でフォルダ名と選択行を調整し、その他は Yazi 既定のまま使う。
 # - ここでは `ratio` だけ `preview` を少し広げ、macOS の media opener と HTML opener を差し替える。それ以外は公式 shipped preset の代表値を既定のまま使う:
 #   - sort_by = "alphabetical"
 #   - sort_sensitive = false

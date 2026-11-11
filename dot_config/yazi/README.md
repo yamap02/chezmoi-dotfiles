@@ -64,7 +64,7 @@
 - `image_filter = "triangle"`
 - `image_quality = 75`
 
-配色・アイコン・プレビュー見た目は `theme.toml` を作っていないため、公式 shipped preset の dark/light theme 既定値をそのまま使います。
+`theme.toml` でフォルダ名を Sonokai の明るい青、選択行を読みやすい配色にしています。ファイル種別の色は Yazi 26.9.1 の既定ルールを保持しています。
 media open は macOS 既定の `open %s` をそのまま使わず、`open -a IINA %s` で `IINA` に明示的に渡します。
 HTML open は macOS の `open %s` に渡すため、システムで設定された既定ブラウザーが起動します。
 
