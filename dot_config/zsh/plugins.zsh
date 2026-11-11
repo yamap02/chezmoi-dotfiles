@@ -18,3 +18,22 @@ function _zsh_plugins_without_atuin() { ! (( $+commands[atuin] )) }
 
 antidote load
 _bind_history_substring_search
+
+# T3 の暗いターミナルで、入力中のコマンドと文字列を Sonokai の色で読みやすくする。
+if [[ -n ${T3CODE_PROJECT_ROOT:-} ]] && (( $+functions[zsh-defer] )); then
+  function _t3_sonokai_syntax_colors() {
+    (( $+parameters[FAST_HIGHLIGHT_STYLES] )) || return
+    local key
+    for key in alias suffix-alias builtin function command precommand hashed-command; do
+      FAST_HIGHLIGHT_STYLES[$key]='fg=#9ed072'
+    done
+    for key in single-quoted-argument double-quoted-argument; do
+      FAST_HIGHLIGHT_STYLES[$key]='fg=#e7c664'
+    done
+    for key in single-hyphen-option double-hyphen-option; do
+      FAST_HIGHLIGHT_STYLES[$key]='fg=#76cce0'
+    done
+    FAST_HIGHLIGHT_STYLES[unknown-token]='fg=#fc5d7c,bold'
+  }
+  zsh-defer _t3_sonokai_syntax_colors
+fi
