@@ -1,0 +1,9 @@
+2026/11/11-10:52:23.958 20cb60 Reusing MANIFEST /Users/user/Library/Application Support/t3code-v2/Local Storage/leveldb/MANIFEST-000001
+2026/11/11-10:52:23.959 20cb60 Recovering log #3
+2026/11/11-10:52:23.959 20cb60 Reusing old log /Users/user/Library/Application Support/t3code-v2/Local Storage/leveldb/000003.log 
+2026/11/11-10:53:23.961 20cb60 Level-0 table #5: started
+2026/11/11-10:53:23.962 20cb60 Level-0 table #5: 405767 bytes OK
+2026/11/11-10:53:23.964 20cb60 Delete type=0 #3
+2026/11/11-17:05:35.087 20cb60 Level-0 table #7: started
+2026/11/11-17:05:35.091 20cb60 Level-0 table #7: 18119 bytes OK
+2026/11/11-17:05:35.093 20cb60 Delete type=0 #4
