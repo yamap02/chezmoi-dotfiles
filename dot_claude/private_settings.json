@@ -237,6 +237,9 @@
   "language": "japanese",
   "sandbox": {
     "enabled": true
+    "filesystem": {
+      "allowWrite": ["~/.Trash"]
+    }
   },
   "advisorModel": "claude-opus-5-5",
   "autoUpdatesChannel": "stable",
