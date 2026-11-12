@@ -236,7 +236,7 @@
   },
   "language": "japanese",
   "sandbox": {
-    "enabled": true
+    "enabled": true,
     "filesystem": {
       "allowWrite": ["~/.Trash"]
     }
