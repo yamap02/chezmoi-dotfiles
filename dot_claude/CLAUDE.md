@@ -28,3 +28,9 @@ gitを用いる
 
 - 削除は `rm` を使う（`alias rm='rmtrash'` によりゴミ箱に移動される）。
 - エイリアスを迂回する削除（`/bin/rm`、`command rm`、`sudo rm`、`find -delete`、`shutil.rmtree` など）は、ユーザーの確認なしに使わない。
+
+## 秘密情報
+- 秘密の値を読もうとしないこと。値が要るコマンドは `with-secret <profile> -- <command> <subcommand> <action> ...` を単独で実行する（連結・リダイレクト不可）。
+- 使えるプロファイル: `github`（GH_TOKEN を渡す）。操作は pr list/view/diff/checks、issue list/view、run list/view、repo view の読み取りだけ。対象は必ず指定する（pr・issue・run は `-R owner/repo`、repo view は `gh repo view owner/repo`）。`--jq` と `-q` は使えない。例: `with-secret github -- gh pr list -R owner/repo`
+- push・clone・checkout・PR 作成など、ローカルで git を動かす操作は with-secret では行わない。利用者に頼むこと。
+- `with-secret` を実行すると macOS の承認ダイアログが出るので、実行の直前に利用者へ承認を頼むこと。
