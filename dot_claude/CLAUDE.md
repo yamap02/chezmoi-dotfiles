@@ -17,20 +17,11 @@ gitを用いる
 
 
 1、防ぐ過剰防御：ほとんど起こらない境界/並行問題については、確率を明確に説明しユーザーの確認を得てから追加し、「理論上より安定」という理由で勝手にコードを膨張させることを厳禁。
-
 2、入口での単一検証：外部データは境界で一度だけ検証し、内部では型システムで流す。層ごとの繰り返し判断を禁止。
-
 3、早期抽象化の拒否：一度きりの使用のロジックは近くにインラインし、無意味なhelperに無闇に早期分割しない。
-
 4、複雑さの制御：不要なtry/catchを使わず、単一関数で明確に処理できるものは無理に分割しない。
 
 ## ファイル削除
 
 - 削除は `rm` を使う（`alias rm='rmtrash'` によりゴミ箱に移動される）。
 - エイリアスを迂回する削除（`/bin/rm`、`command rm`、`sudo rm`、`find -delete`、`shutil.rmtree` など）は、ユーザーの確認なしに使わない。
-
-## 秘密情報
-- 秘密の値を読もうとしないこと。値が要るコマンドは `with-secret <profile> -- <command> <subcommand> <action> ...` を単独で実行する（連結・リダイレクト不可）。
-- 使えるプロファイル: `github`（GH_TOKEN を渡す）。操作は pr list/view/diff/checks、issue list/view、run list/view、repo view の読み取りだけ。対象は必ず指定する（pr・issue・run は `-R owner/repo`、repo view は `gh repo view owner/repo`）。`--jq` と `-q` は使えない。例: `with-secret github -- gh pr list -R owner/repo`
-- push・clone・checkout・PR 作成など、ローカルで git を動かす操作は with-secret では行わない。利用者に頼むこと。
-- `with-secret` を実行すると macOS の承認ダイアログが出るので、実行の直前に利用者へ承認を頼むこと。
