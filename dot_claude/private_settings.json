@@ -252,6 +252,15 @@
       "allowWrite": [
         "~/.Trash"
       ]
+    },
+    "excludedCommands": [
+      "git worktree *"
+    ],
+    "network": {
+      "allowedDomains": [
+        "registry.npmjs.org",
+        "workers.cloudflare.com"
+      ]
     }
   },
   "advisorModel": "claude-opus-5-5",
